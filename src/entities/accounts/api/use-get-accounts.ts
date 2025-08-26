@@ -1,9 +1,10 @@
 import { client } from '@/shared/api/hono/client';
+import { ACCOUNTS_QUERY_KEY } from '@/shared/lib/consts/query-keys';
 import { useQuery } from '@tanstack/react-query';
 
 export const useGetAccounts = () => {
   const query = useQuery({
-    queryKey: ["accounts"],
+    queryKey: ACCOUNTS_QUERY_KEY,
     queryFn: async () => {
       const response = await client.api.accounts.$get();
 
