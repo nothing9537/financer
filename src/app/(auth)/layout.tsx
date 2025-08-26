@@ -5,7 +5,7 @@ interface SignLayoutProps {
   children: React.ReactNode;
 }
 
-export const SignLayout: FC<SignLayoutProps> = ({ children }) => {
+const SignLayout: FC<SignLayoutProps> = ({ children }) => {
   return (
     <div className='min-h-screen grid grid-cols-1 lg:grid-cols-2'>
       <div className='h-full lg:flex flex-col items-center justify-center p-4'>
@@ -27,3 +27,5 @@ export const SignLayout: FC<SignLayoutProps> = ({ children }) => {
     </div>
   );
 }
+
+export default SignLayout;
