@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Trash } from 'lucide-react';
+import { Loader2, Trash } from 'lucide-react';
 
 import { Input } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
@@ -15,13 +15,11 @@ export const AccountForm: React.FC<AccountFormProps> = ({ id, defaultValues, onS
     defaultValues,
   });
 
-  const handleSubmit = (data: AccountFormSchemaType) => {
-    console.log(data);
-  };
-
   const handleDelete = () => {
     onDelete?.();
   };
+
+  const buttonContent = disabled ? <Loader2 className='size-4 animate-spin' /> : (id ? 'Save Changes' : 'Create Account');
 
   return (
     <Form {...form}>
@@ -43,7 +41,7 @@ export const AccountForm: React.FC<AccountFormProps> = ({ id, defaultValues, onS
           )}
         />
         <Button className='w-full' disabled={disabled} type='submit'>
-          {id ? 'Save Changes' : 'Create Account'}
+          {buttonContent}
         </Button>
         {!!id && (
           <Button className='w-full' disabled={disabled} type='button' variant="outline" onClick={handleDelete}>

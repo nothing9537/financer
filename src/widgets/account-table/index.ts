@@ -1,0 +1,1 @@
+export { AccountsTable } from './ui/table/accounts-table'; 
