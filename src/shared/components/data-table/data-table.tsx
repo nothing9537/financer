@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   Row,
@@ -16,13 +16,13 @@ import {
 
 import { Table } from "@/shared/ui/table";
 
-import { DataTableHeader } from './data-table-header';
-import { DataTableBody } from './data-table-body';
-import { DataTablePagination } from './data-table-pagination';
-import { DataTableFiltering } from './types';
-import { DataTableFilter } from './data-table-filter';
 import { DataTableDeleteButton } from './data-table-delete-button';
 import { DataTableSelectedRows } from './data-table-selected-rows';
+import { DataTablePagination } from './data-table-pagination';
+import { DataTableHeader } from './data-table-header';
+import { DataTableFilter } from './data-table-filter';
+import { DataTableBody } from './data-table-body';
+import { DataTableFiltering } from './types';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -30,12 +30,13 @@ interface DataTableProps<TData, TValue> {
   filter?: DataTableFiltering;
   onDelete?: (rows: Row<TData>[]) => void;
   disabled?: boolean;
+  isLoading?: boolean;
 }
 
-export function DataTable<TData, TValue>({ columns, data, filter, onDelete, disabled }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+export function DataTable<TData, TValue>({ columns, data, filter, disabled, onDelete, isLoading }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
     data,
@@ -47,11 +48,7 @@ export function DataTable<TData, TValue>({ columns, data, filter, onDelete, disa
     onColumnFiltersChange: setColumnFilters,
     onSortingChange: setSorting,
     onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      rowSelection,
-    },
+    state: { sorting, columnFilters, rowSelection },
   });
 
   return (
@@ -62,12 +59,12 @@ export function DataTable<TData, TValue>({ columns, data, filter, onDelete, disa
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>
-          <DataTableHeader table={table} />
-          <DataTableBody table={table} columns={columns} />
+          {!isLoading && <DataTableHeader table={table} />}
+          <DataTableBody table={table} columns={columns} isLoading={isLoading} />
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <DataTableSelectedRows table={table} />
+        {onDelete && <DataTableSelectedRows table={table} />}
         <DataTablePagination table={table} />
       </div>
     </div>

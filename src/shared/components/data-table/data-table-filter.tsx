@@ -1,7 +1,9 @@
-import { Input } from '@/shared/ui/input';
-import { DataTableFiltering, DataTableProps } from './types';
+'use client';
 
-type DataTableFilterProps<TData, TValue> = Omit<DataTableProps<TData, TValue>, 'columns'> & { filter?: DataTableFiltering };
+import { Input } from '@/shared/ui/input';
+import { DataTableFiltering, DataTableElementProps } from './types';
+
+type DataTableFilterProps<TData, TValue> = DataTableElementProps<TData, TValue> & { filter?: DataTableFiltering };
 
 export function DataTableFilter<TData, TValue>({ table, filter }: DataTableFilterProps<TData, TValue>) {
   if (filter?.key) {

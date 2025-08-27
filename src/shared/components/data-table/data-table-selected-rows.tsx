@@ -1,9 +1,13 @@
-import { DataTableProps } from './types';
+'use client';
 
-export function DataTableSelectedRows<TData, TValue>({ table }: Omit<DataTableProps<TData, TValue>, 'columns'>) {
+import { DataTableElementProps } from './types';
+
+export function DataTableSelectedRows<TData, TValue>({ table }: DataTableElementProps<TData, TValue>) {
+  const selectedRows = table.getFilteredSelectedRowModel().rows.length;
+
   return (
     <div className="text-muted-foreground flex-1 text-sm">
-      {table.getFilteredSelectedRowModel().rows.length} of{" "}
+      {selectedRows} of{" "}
       {table.getFilteredRowModel().rows.length} row(s) selected.
     </div>
   );

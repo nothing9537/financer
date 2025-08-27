@@ -1,40 +1,26 @@
 'use client';
 
 import { DataTable } from '@/shared/components/data-table/data-table';
-import { columns, Payment } from '../../lib/consts/columns';
+import { useBulkDeleteAccounts, useGetAccounts } from '@/entities/accounts';
 
-const data: Payment[] = [
-  {
-    id: "728ed52f",
-    amount: 100,
-    status: "pending",
-    email: "m@example.com",
-  },
-  {
-    id: "718ed52f",
-    amount: 72,
-    status: "success",
-    email: "a@example.com",
-  },
-  {
-    id: "738ed52f",
-    amount: 6,
-    status: "pending",
-    email: "b@example.com",
-  },
-  {
-    id: "748ed52f",
-    amount: 170,
-    status: "failed",
-    email: "test@gmail.com",
-  },
-]
+import { columns } from '../../lib/consts/columns';
 
 export const AccountsTable: React.FC = () => {
+  const accountsQuery = useGetAccounts();
+  const deleteAccountsMutation = useBulkDeleteAccounts();
+
+  const accounts = accountsQuery.data || [];
+  const disabled = accountsQuery.isLoading || deleteAccountsMutation.isPending;
+
   return (
     <DataTable
       columns={columns}
-      data={data}
+      data={accounts}
+      isLoading={accountsQuery.isLoading}
+      disabled={disabled}
+      onDelete={(r) => {
+        deleteAccountsMutation.mutate({ ids: r.map((row) => row.original.id) });
+      }}
     />
   );
 };

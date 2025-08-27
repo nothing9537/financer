@@ -1,10 +1,12 @@
+'use client';
+
 import { flexRender } from '@tanstack/react-table';
 
 import { TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 
-import { DataTableProps } from './types';
+import { DataTableElementProps } from './types';
 
-export function DataTableHeader<TData, TValue>({ table }: Omit<DataTableProps<TData, TValue>, 'columns'>) {
+export function DataTableHeader<TData, TValue>({ table }: DataTableElementProps<TData, TValue>) {
   return (
     <TableHeader>
       {table.getHeaderGroups().map((headerGroup) => (
