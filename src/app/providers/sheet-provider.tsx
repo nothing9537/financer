@@ -1,14 +1,14 @@
 'use client';
 
-import { FC } from 'react';
+import { EditAccountSheet, EditCategorySheet, NewAccountSheet, NewCategorySheet } from '@/widgets/entity-sheet';
 
-import { EditAccountSheet, NewAccountSheet } from '@/widgets/account-sheet';
-
-export const SheetProvider: FC = () => {
+export const SheetProvider: React.FC = () => {
   return (
     <>
       <NewAccountSheet />
       <EditAccountSheet />
+      <EditCategorySheet />
+      <NewCategorySheet />
     </>
   );
 };

@@ -1,23 +1,19 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
 
-const SHEET_TYPES = ['new-account', 'edit-account', 'delete-account', 'open-account'] as const;
+const SHEET_TYPES = ['new-account', 'edit-account', 'new-category', 'edit-category'] as const;
 export type SheetType = (typeof SHEET_TYPES)[number];
 
-interface OpenAccountSheetData {
-  id: string;
-
-}
-interface EditAccountSheetData {
+interface EditEntitySheetData {
   name: string;
   id: string;
 }
 
 type SheetDataMap = {
   'new-account': undefined;
-  'edit-account': EditAccountSheetData;
-  'delete-account': undefined;
-  'open-account': OpenAccountSheetData;
+  'edit-account': EditEntitySheetData;
+  'new-category': undefined;
+  'edit-category': EditEntitySheetData;
 }
 
 interface SheetState {
