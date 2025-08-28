@@ -7,10 +7,10 @@ import { CardHeader, CardTitle } from '@/shared/ui/card';
 import { useSheet } from '@/shared/lib/hooks/use-sheet';
 
 export const AccountsHeader: React.FC = () => {
-  const sheet = useSheet();
+  const sheet = useSheet<'new-account'>();
 
   return (
-    <CardHeader className='gap-y-2 lg:flex-row lg:items-center lg:justify-between'>
+    <CardHeader className='gap-y-2'>
       <CardTitle className='text-xl line-clamp-1'>
         Accounts page
       </CardTitle>

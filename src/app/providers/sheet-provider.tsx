@@ -2,12 +2,13 @@
 
 import { FC } from 'react';
 
-import { NewAccountSheet } from '@/widgets/account-sheet';
+import { EditAccountSheet, NewAccountSheet } from '@/widgets/account-sheet';
 
 export const SheetProvider: FC = () => {
   return (
     <>
       <NewAccountSheet />
+      <EditAccountSheet />
     </>
   );
 };

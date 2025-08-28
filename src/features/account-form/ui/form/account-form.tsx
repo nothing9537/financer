@@ -9,7 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/shared/ui/f
 import { AccountFormProps, AccountFormSchemaType } from '../../model/types';
 import { accountFormSchema } from '../../lib/consts/account-form-schema';
 
-export const AccountForm: React.FC<AccountFormProps> = ({ id, defaultValues, onSubmit, onDelete, disabled }) => {
+export const AccountForm: React.FC<AccountFormProps> = ({ id, defaultValues, onSubmit, onDelete, disabled, placeholder }) => {
   const form = useForm<AccountFormSchemaType>({
     resolver: zodResolver(accountFormSchema),
     defaultValues,
@@ -33,7 +33,7 @@ export const AccountForm: React.FC<AccountFormProps> = ({ id, defaultValues, onS
               <FormControl>
                 <Input
                   disabled={disabled}
-                  placeholder='e.g. My Savings, Cash, Bank'
+                  placeholder={placeholder || 'e.g. My Savings, Cash, Bank'}
                   {...field}
                 />
               </FormControl>

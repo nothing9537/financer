@@ -10,4 +10,5 @@ export interface AccountFormProps {
   onSubmit: (data: AccountFormSchemaType) => void;
   onDelete?: () => void;
   disabled?: boolean;
+  placeholder?: string;
 }

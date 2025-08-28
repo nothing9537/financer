@@ -1,47 +1,28 @@
 "use client";
 
-import { ArrowUpDown } from 'lucide-react';
 import { ColumnDef } from "@tanstack/react-table";
 
 import { Account } from '@/entities/accounts';
-import { Button } from '@/shared/ui/button';
-import { Checkbox } from '@/shared/ui/checkbox';
+
+import { AccountsActionsCell } from '../../ui/table/cells/accounts-actions-cell';
+import { NameHeader } from '../../ui/table/headers/name-header';
+import { SelectHeader } from '../../ui/table/headers/select-header';
+import { SelectCell } from '../../ui/table/cells/select-cell';
 
 export const columns: ColumnDef<Account>[] = [
   {
     id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
+    header: SelectHeader,
+    cell: SelectCell,
     enableSorting: false,
     enableHiding: false,
   },
   {
     accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
+    header: NameHeader,
   },
+  {
+    id: 'actions',
+    cell: AccountsActionsCell
+  }
 ]
