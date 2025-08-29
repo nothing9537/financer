@@ -1,9 +1,9 @@
-import { InferResponseType } from 'hono';
-
-import { client } from '@/shared/api/hono/client';
-import { CATEGORIES_QUERY_KEY } from '@/shared/lib/consts/query-keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { InferResponseType } from 'hono';
+
+import { CATEGORIES_QUERY_KEY, CATEGORY_QUERY_KEY } from '@/shared/lib/consts/query-keys';
+import { client } from '@/shared/api/hono/client';
 
 type ResponseType = InferResponseType<typeof client.api.categories[":id"]['$delete']>;
 
@@ -23,6 +23,7 @@ export const useDeleteCategory = (id?: string) => {
     onSuccess: () => {
       toast.success("Category deleted");
       queryClient.refetchQueries({ queryKey: CATEGORIES_QUERY_KEY });
+      queryClient.refetchQueries({ queryKey: CATEGORY_QUERY_KEY(id) });
     },
     onError: (error) => {
       toast.error(error.message || "Failed to delete category");

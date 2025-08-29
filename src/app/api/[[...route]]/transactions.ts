@@ -20,6 +20,7 @@ const queryValidator = zValidator("query", z.object({
 const idParamValidator = zValidator("param", z.object({ id: z.string().optional() }));
 const transactionJsonValidator = zValidator("json", insertTransactionSchema.omit({ id: true }));
 const bulkDeleteValidator = zValidator("json", z.object({ ids: z.array(z.string()) }));
+const bulkCreateValidator = zValidator("json", z.array(insertTransactionSchema.omit({ id: true })))
 const editTransactionValidator = [idParamValidator, transactionJsonValidator] as const;
 
 const selectObject = {
@@ -108,6 +109,26 @@ const app = new Hono()
     }).returning();
 
     return ctx.json({ payload: data }, 201);
+  })
+  .post("/bulk-create", clerkMiddleware(), bulkCreateValidator, async (ctx) => {
+    const auth = getAuth(ctx);
+    const values = ctx.req.valid("json");
+
+    if (!auth?.isAuthenticated) {
+      return ctx.json({ message: 'Unauthorized' }, 401);
+    }
+
+    const data = await db
+      .insert(transactions)
+      .values(
+        values.map((v) => ({
+          id: uuidv4(),
+          ...v,
+        })),
+      )
+      .returning();
+
+      return ctx.json({ transactions: data }, 200);
   })
   .post("/bulk-delete", clerkMiddleware(), bulkDeleteValidator, async (ctx) => {
     const auth = getAuth(ctx);
