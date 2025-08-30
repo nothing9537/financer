@@ -20,31 +20,23 @@ export const EditTransactionSheet: React.FC = () => {
     handleDelete,
   } = useTransactionSheet<'edit-transaction'>('edit', sheet, sheet.data?.id);
 
-  if (!sheet.data) {
-    return null;
-  }
-
-  if (!sheet.data?.accountId) {
-    return null;
-  }
-
-  const { accountId, amount, categoryId, date, notes, payee, id } = sheet.data;
-
   return (
     <>
       <ConfirmDialog />
       <TransactionSheet type='edit-transaction' title='Edit Transaction' description='Edit an existing transaction on your record'>
-        <TransactionForm
-          id={id}
-          onSubmit={handleSubmit}
-          onCreateAccount={onCreateAccount}
-          onCreateCategory={onCreateCategory}
-          disabled={isPending}
-          accountOptions={accountOptions}
-          categoryOptions={categoryOptions}
-          defaultValues={{ accountId, amount: amount.toString(), categoryId, date, notes, payee }}
-          onDelete={handleDelete}
-        />
+        {sheet.data?.accountId && (
+          <TransactionForm
+            id={sheet.data.id}
+            onSubmit={handleSubmit}
+            onCreateAccount={onCreateAccount}
+            onCreateCategory={onCreateCategory}
+            disabled={isPending}
+            accountOptions={accountOptions}
+            categoryOptions={categoryOptions}
+            defaultValues={{ ...sheet.data, amount: sheet.data.amount.toString() }}
+            onDelete={handleDelete}
+          />
+        )}
       </TransactionSheet>
     </>
   );
