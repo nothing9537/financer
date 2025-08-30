@@ -34,6 +34,8 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({ columns, data, filter, disabled, onDelete, isLoading }: DataTableProps<TData, TValue>) {
+
+
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [rowSelection, setRowSelection] = React.useState({});
@@ -50,6 +52,10 @@ export function DataTable<TData, TValue>({ columns, data, filter, disabled, onDe
     onRowSelectionChange: setRowSelection,
     state: { sorting, columnFilters, rowSelection },
   });
+
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
 
   return (
     <div>

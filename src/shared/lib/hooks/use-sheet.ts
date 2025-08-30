@@ -1,7 +1,9 @@
+import { Account } from '@/entities/accounts';
+import { Category } from '@/entities/categories';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
 
-const SHEET_TYPES = ['new-account', 'edit-account', 'new-category', 'edit-category'] as const;
+const SHEET_TYPES = ['new-account', 'edit-account', 'new-category', 'edit-category', 'new-transaction'] as const;
 export type SheetType = (typeof SHEET_TYPES)[number];
 
 interface EditEntitySheetData {
@@ -9,11 +11,17 @@ interface EditEntitySheetData {
   id: string;
 }
 
+interface NewTransactionSheetData {
+  category: Category;
+  account: Account;
+}
+
 type SheetDataMap = {
   'new-account': undefined;
   'edit-account': EditEntitySheetData;
   'new-category': undefined;
   'edit-category': EditEntitySheetData;
+  'new-transaction': NewTransactionSheetData,
 }
 
 interface SheetState {

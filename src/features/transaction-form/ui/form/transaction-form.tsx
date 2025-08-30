@@ -1,0 +1,67 @@
+'use client';
+
+import { Loader2, Trash } from 'lucide-react';
+import { createContext } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { convertAmountToMilliunits } from '@/shared/lib/utils/math';
+import { Button } from '@/shared/ui/button';
+import { Form } from '@/shared/ui/form';
+
+import { TransactionFormProps, TransactionFormSchemaType } from '../../model/types';
+import { resolverFormSchema } from '../../lib/consts/form';
+import { AccountSelect } from './account-select';
+import { CategorySelect } from './category-select';
+import { PickDate } from './pick-date';
+import { PayeeInput } from './payee-input';
+import { AmountInput } from './amount-input';
+import { NotesTextarea } from './notes-textarea';
+
+export const TransactionFormContext = createContext<TransactionFormProps>({
+  accountOptions: [],
+  categoryOptions: [],
+  onCreateAccount: () => { },
+  onCreateCategory: () => { },
+  onSubmit: () => { }
+});
+
+export const TransactionForm = (props: TransactionFormProps) => {
+  const { onSubmit, disabled, id } = props;
+
+  const form = useForm<TransactionFormSchemaType>({
+    resolver: zodResolver(resolverFormSchema)
+  });
+
+  const handleSubmit = (data: TransactionFormSchemaType) => {
+    const amountInMilliunits = convertAmountToMilliunits(data.amount);
+
+    onSubmit({ ...data, amount: amountInMilliunits });
+  };
+
+  const buttonContent = disabled ? <Loader2 className='size-4 animate-spin' /> : 'Add a transaction';
+
+  return (
+    <TransactionFormContext value={props}>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-4 pt-4'>
+          <PickDate />
+          <AccountSelect />
+          <CategorySelect />
+          <AmountInput />
+          <PayeeInput />
+          <NotesTextarea />
+          <Button className='w-full' disabled={disabled} type='submit'>
+            {buttonContent}
+          </Button>
+          {!!id && (
+            <Button className='w-full' disabled={disabled} type='button' variant="outline">
+              <Trash className='size-4 mr-2' />
+              Delete transaction
+            </Button>
+          )}
+        </form>
+      </Form>
+    </TransactionFormContext>
+  );
+};
