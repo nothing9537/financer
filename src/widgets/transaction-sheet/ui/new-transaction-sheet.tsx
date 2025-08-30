@@ -2,11 +2,13 @@
 
 import { TransactionForm } from '@/features/transaction-form';
 
-import { useNewTransactionSheet } from '../lib/hooks/use-new-transaction-sheet';
+import { useTransactionSheet } from '../lib/hooks/use-transaction-sheet';
 import { TransactionSheet } from './transaction-sheet';
+import { useSheet } from '@/shared/lib/hooks/use-sheet';
 
 export const NewTransactionSheet: React.FC = () => {
-  const { handleSubmit, accountOptions, categoryOptions, onCreateAccount, onCreateCategory, isPending } = useNewTransactionSheet();
+  const sheet = useSheet<'new-transaction'>();
+  const { handleSubmit, accountOptions, categoryOptions, onCreateAccount, onCreateCategory, isPending } = useTransactionSheet<'new-transaction'>('create', sheet);
 
   return (
     <TransactionSheet type='new-transaction' title='New Transaction' description='Add a new transaction to your record'>

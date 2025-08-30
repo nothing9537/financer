@@ -128,7 +128,7 @@ const app = new Hono()
       )
       .returning();
 
-      return ctx.json({ transactions: data }, 200);
+    return ctx.json({ transactions: data }, 200);
   })
   .post("/bulk-delete", clerkMiddleware(), bulkDeleteValidator, async (ctx) => {
     const auth = getAuth(ctx);
@@ -146,7 +146,7 @@ const app = new Hono()
         .where(
           and(
             inArray(transactions.id, values.ids),
-            eq(accounts.id, auth.userId),
+            eq(accounts.userId, auth.userId),
           ),
         )
     );
@@ -182,7 +182,7 @@ const app = new Hono()
         .where(
           and(
             eq(transactions.id, id),
-            eq(accounts.id, auth.userId),
+            eq(accounts.userId, auth.userId),
           ),
         )
     );
@@ -222,7 +222,7 @@ const app = new Hono()
         .where(
           and(
             eq(transactions.id, id),
-            eq(accounts.id, auth.userId),
+            eq(accounts.userId, auth.userId),
           ),
         )
     );

@@ -21,9 +21,9 @@ export const useDeleteTransaction = (id?: string) => {
       return await response.json();
     },
     onSuccess: () => {
-      toast.success("Account deleted");
-      queryClient.refetchQueries({ queryKey: TRANSACTIONS_QUERY_KEY });
-      queryClient.refetchQueries({ queryKey: TRANSACTION_QUERY_KEY(id) });
+      toast.success("Transaction deleted");
+      queryClient.invalidateQueries({ queryKey: TRANSACTIONS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: TRANSACTION_QUERY_KEY(id) });
     },
     onError: (error) => {
       toast.error(error.message || "Failed to delete transaction");

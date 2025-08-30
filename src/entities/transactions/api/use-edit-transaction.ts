@@ -16,15 +16,15 @@ export const useEditTransaction = (id?: string) => {
       const response = await client.api.transactions[':id']['$patch']({ json, param: { id } });
 
       if (!response.ok) {
-        throw new Error('Failed to create transaction');
+        throw new Error('Failed to update transaction');
       }
 
       return await response.json();
     },
     onSuccess: () => {
       toast.success("Transaction updated");
-      queryClient.refetchQueries({ queryKey: TRANSACTIONS_QUERY_KEY });
-      queryClient.refetchQueries({ queryKey: TRANSACTION_QUERY_KEY(id) });
+      queryClient.invalidateQueries({ queryKey: TRANSACTIONS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: TRANSACTION_QUERY_KEY(id) });
     },
     onError: (error) => {
       toast.error(error.message || "Failed to update transaction");

@@ -16,9 +16,6 @@ export const EntityForm = ({ id, defaultValues, onSubmit, onDelete, disabled, pl
     defaultValues,
   });
 
-  const handleDelete = () => {
-    onDelete?.();
-  };
 
   const buttonContent = disabled ? <Loader2 className='size-4 animate-spin' /> : (id ? 'Save Changes' : `Create ${entity}`);
 
@@ -45,7 +42,7 @@ export const EntityForm = ({ id, defaultValues, onSubmit, onDelete, disabled, pl
           {buttonContent}
         </Button>
         {!!id && (
-          <Button className='w-full' disabled={disabled} type='button' variant="outline" onClick={handleDelete}>
+          <Button className='w-full' disabled={disabled} type='button' variant="outline" onClick={onDelete}>
             <Trash className='size-4 mr-2' />
             Delete {entity}
           </Button>

@@ -27,10 +27,11 @@ export const TransactionFormContext = createContext<TransactionFormProps>({
 });
 
 export const TransactionForm = (props: TransactionFormProps) => {
-  const { onSubmit, disabled, id } = props;
+  const { onSubmit, onDelete, disabled, id, defaultValues } = props;
 
   const form = useForm<TransactionFormSchemaType>({
-    resolver: zodResolver(resolverFormSchema)
+    resolver: zodResolver(resolverFormSchema),
+    defaultValues,
   });
 
   const handleSubmit = (data: TransactionFormSchemaType) => {
@@ -39,7 +40,7 @@ export const TransactionForm = (props: TransactionFormProps) => {
     onSubmit({ ...data, amount: amountInMilliunits });
   };
 
-  const buttonContent = disabled ? <Loader2 className='size-4 animate-spin' /> : 'Add a transaction';
+  const buttonContent = disabled ? <Loader2 className='size-4 animate-spin' /> : id ? 'Edit transaction' : 'Add a transaction';
 
   return (
     <TransactionFormContext value={props}>
@@ -55,7 +56,7 @@ export const TransactionForm = (props: TransactionFormProps) => {
             {buttonContent}
           </Button>
           {!!id && (
-            <Button className='w-full' disabled={disabled} type='button' variant="outline">
+            <Button className='w-full' disabled={disabled} type='button' variant="outline" onClick={onDelete}>
               <Trash className='size-4 mr-2' />
               Delete transaction
             </Button>

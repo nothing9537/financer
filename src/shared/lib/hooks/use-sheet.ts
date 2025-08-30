@@ -1,9 +1,10 @@
 import { Account } from '@/entities/accounts';
 import { Category } from '@/entities/categories';
+import { Transaction } from '@/entities/transactions';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
 
-const SHEET_TYPES = ['new-account', 'edit-account', 'new-category', 'edit-category', 'new-transaction'] as const;
+const SHEET_TYPES = ['new-account', 'edit-account', 'new-category', 'edit-category', 'new-transaction', 'edit-transaction'] as const;
 export type SheetType = (typeof SHEET_TYPES)[number];
 
 interface EditEntitySheetData {
@@ -22,27 +23,28 @@ type SheetDataMap = {
   'new-category': undefined;
   'edit-category': EditEntitySheetData;
   'new-transaction': NewTransactionSheetData,
+  'edit-transaction': Transaction;
 }
 
 interface SheetState {
   type: SheetType | null;
-  data: SheetDataMap[SheetType] | null;
+  data?: SheetDataMap[SheetType] | undefined;
   isOpen: boolean;
   onClose: () => void;
-  onOpen: <T extends SheetType>(type: T, data?: SheetDataMap[T] | null) => void;
+  onOpen: <T extends SheetType>(type: T, data?: SheetDataMap[T] | undefined) => void;
 }
 
 export const useGeneralSheet = create<SheetState>()(devtools((set) => ({
-  data: null,
+  data: undefined,
   isOpen: false,
   type: null,
-  onOpen: (type, data = null) => set({ isOpen: true, type, data }),
-  onClose: () => set({ isOpen: false, type: null, data: null }),
+  onOpen: (type, data = undefined) => set({ isOpen: true, type, data }),
+  onClose: () => set({ isOpen: false, type: null, data: undefined }),
 })));
 
-type SheetStateFor<T extends SheetType> = Omit<SheetState, 'onOpen' | 'data'> & {
-  data: SheetDataMap[T] | null;
-  onOpen: (type: T, data?: SheetDataMap[T] | null) => void;
+export type SheetStateFor<T extends SheetType> = Omit<SheetState, 'onOpen' | 'data'> & {
+  data: SheetDataMap[T] | undefined;
+  onOpen: (type: T, data?: SheetDataMap[T] | undefined) => void;
 }
 
 export const useSheet = <T extends SheetType>(): SheetStateFor<T> => {
@@ -50,7 +52,7 @@ export const useSheet = <T extends SheetType>(): SheetStateFor<T> => {
 
   return {
     ...sheet,
-    data: sheet.data as SheetDataMap[T] | null,
-    onOpen: (type, data = null) => sheet.onOpen(type, data),
+    data: sheet.data as SheetDataMap[T] | undefined,
+    onOpen: (type, data = undefined) => sheet.onOpen(type, data),
   };
 };

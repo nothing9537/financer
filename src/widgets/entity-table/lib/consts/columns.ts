@@ -25,7 +25,7 @@ export const accountsColumns: ColumnDef<Account>[] = [
   {
     id: 'actions',
     cell: AccountsActionsCell,
-  }
+  },
 ];
 
 export const categoriesColumns: ColumnDef<Account>[] = [

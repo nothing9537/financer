@@ -1,6 +1,7 @@
 import { Card, CardContent } from '@/shared/ui/card';
 
 import { TransactionsPageHeader } from './components/categories-header';
+import { TransactionsTable } from '@/widgets/transactions-table';
 
 const TransactionsPage: React.FC = () => {
   return (
@@ -8,7 +9,7 @@ const TransactionsPage: React.FC = () => {
       <Card className="border-none drop-shadow-sm w-full h-fit">
         <TransactionsPageHeader />
         <CardContent>
-          sdasdasdaasd
+          <TransactionsTable />
         </CardContent>
       </Card>
     </div>

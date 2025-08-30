@@ -23,7 +23,7 @@ export const useCreateTransaction = () => {
     },
     onSuccess: () => {
       toast.success("Transaction created");
-      queryClient.refetchQueries({ queryKey: TRANSACTIONS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: TRANSACTIONS_QUERY_KEY });
     },
     onError: (error) => {
       toast.error(error.message || "Failed to create transaction");
