@@ -1,10 +1,11 @@
 import { Account } from '@/entities/accounts';
 import { Category } from '@/entities/categories';
 import { Transaction } from '@/entities/transactions';
+import { TxShape } from '@/features/csv-import-button';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
 
-const SHEET_TYPES = ['new-account', 'edit-account', 'new-category', 'edit-category', 'new-transaction', 'edit-transaction'] as const;
+const SHEET_TYPES = ['new-account', 'edit-account', 'new-category', 'edit-category', 'new-transaction', 'edit-transaction', 'edit-csv-transaction'] as const;
 export type SheetType = (typeof SHEET_TYPES)[number];
 
 interface EditEntitySheetData {
@@ -24,6 +25,7 @@ type SheetDataMap = {
   'edit-category': EditEntitySheetData;
   'new-transaction': NewTransactionSheetData,
   'edit-transaction': Transaction;
+  'edit-csv-transaction': TxShape;
 }
 
 interface SheetState {

@@ -13,7 +13,7 @@ export const CategoryCell = ({ row }: CellContext<Transaction, unknown>) => {
     if (row.original.categoryId && row.original.category) {
       editCategorySheet.onOpen('edit-category', { id: row.original.categoryId, name: row.original.category })
     } else {
-      editTransactionSheet.onOpen('edit-transaction', row.original);
+      editTransactionSheet.onOpen('edit-transaction', { ...row.original, type: 'view-edit' });
     }
   }
 

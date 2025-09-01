@@ -50,8 +50,8 @@ export const AmountInput: React.FC<AmountInputProps> = ({ value, onChange, place
         disabled={disabled}
       />
       <p className='text-sm text-muted-foreground mt-2'>
-        {isIncome && 'This will count as income'}
-        {isExpense && 'This will count as an expense'}
+        {isIncome && 'This will count as income.'}
+        {isExpense && 'This will count as an expense.'}
       </p>
     </div>
   );

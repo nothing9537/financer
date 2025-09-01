@@ -24,6 +24,5 @@ export function DataTablePagination<TData, TValue>({ table }: DataTableElementPr
         Next
       </Button>
     </>
-
-  )
-}
+  );
+};

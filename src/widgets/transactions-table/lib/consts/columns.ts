@@ -1,19 +1,20 @@
 import { Transaction } from '@/entities/transactions';
 import { ColumnDef } from '@tanstack/react-table';
 
-import { CategoryHeader } from '../../ui/table/headers/category-header';
-import { AccountHeader } from '../../ui/table/headers/account-header';
-import { SelectHeader } from '../../ui/table/headers/select-header';
-import { AmountHeader } from '../../ui/table/headers/amount-header';
-import { PayeeHeader } from '../../ui/table/headers/payee-header';
-import { DateHeader } from '../../ui/table/headers/date-header';
+import { CategoryHeader } from '../../ui/transactions-table/headers/category-header';
+import { AccountHeader } from '../../ui/transactions-table/headers/account-header';
+import { SelectHeader } from '../../ui/common-headers/select-header';
+import { AmountHeader } from '../../ui/transactions-table/headers/amount-header';
+import { PayeeHeader } from '../../ui/transactions-table/headers/payee-header';
+import { DateHeader } from '../../ui/transactions-table/headers/date-header';
 
-import { TransactionsActionsCell } from '../../ui/table/cells/transactions-actions-cell';
-import { SelectCell } from '../../ui/table/cells/select-cell';
-import { DateCell } from '../../ui/table/cells/date-cell';
-import { AmountCell } from '../../ui/table/cells/amount-cell';
-import { AccountCell } from '../../ui/table/cells/account-cell';
-import { CategoryCell } from '../../ui/table/cells/category-cell';
+import { TransactionsActionsCell } from '../../ui/transactions-table/cells/transactions-actions-cell';
+import { SelectCell } from '../../ui/common-cells/select-cell';
+import { DateCell } from '../../ui/transactions-table/cells/date-cell';
+import { AmountCell } from '../../ui/transactions-table/cells/amount-cell';
+import { AccountCell } from '../../ui/transactions-table/cells/account-cell';
+import { CategoryCell } from '../../ui/transactions-table/cells/category-cell';
+import { NotesCell } from '../../ui/transactions-table/cells/notes-cell';
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -47,6 +48,11 @@ export const columns: ColumnDef<Transaction>[] = [
     accessorKey: 'account',
     header: AccountHeader,
     cell: AccountCell,
+  },
+  {
+    accessorKey: 'notes',
+    header: "Notes",
+    cell: NotesCell,
   },
   {
     id: 'actions',

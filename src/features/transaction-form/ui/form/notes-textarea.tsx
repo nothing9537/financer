@@ -23,7 +23,7 @@ export const NotesTextarea: React.FC = () => {
               {...field}
               value={field.value ?? ''}
               disabled={disabled}
-              placeholder='Enter transaction notes or leave it empty'
+              placeholder='Enter transaction notes or leave it empty.'
             />
           </FormControl>
         </FormItem>

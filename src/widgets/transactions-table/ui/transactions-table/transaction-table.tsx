@@ -1,11 +1,11 @@
 'use client';
 
-import { useBulkDeleteTransactions, useGetTransactions } from '@/entities/transactions';
+import { Transaction, useBulkDeleteTransactions, useGetTransactions } from '@/entities/transactions';
 import { DataTable } from '@/shared/components/data-table';
 
 import { columns } from '../../lib/consts/columns';
 
-export const TransactionsTable = () => {
+export const TransactionsTable: React.FC = () => {
   const transactionsQuery = useGetTransactions();
   const bulkTransactionsDelete = useBulkDeleteTransactions();
 
@@ -14,14 +14,12 @@ export const TransactionsTable = () => {
   const data = transactionsQuery.data || [];
 
   return (
-    <DataTable
+    <DataTable<Transaction, Transaction[]>
       data={data}
       columns={columns}
       isLoading={transactionsQuery.isLoading}
       disabled={isDisabled}
-      onDelete={(r) => {
-        bulkTransactionsDelete.mutate({ ids: r.map((row) => row.original.id) });
-      }}
+      onDelete={(r) => bulkTransactionsDelete.mutate({ ids: r.map((row) => row.original.id) })}
       filter={{
         key: 'payee',
         placeholder: 'Filter transaction by payee...'

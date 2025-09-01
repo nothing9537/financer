@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Select } from '@/shared/components/select';
+import { CategorySelect as EntityCategorySelect } from '@/entities/categories';
 
 import { TransactionApiFormSchema } from '../../model/types';
 import { FormControl, FormField, FormItem, FormLabel } from '@/shared/ui/form';
@@ -9,7 +9,7 @@ import { TransactionFormContext } from './transaction-form';
 
 export const CategorySelect: React.FC = () => {
   const form = useFormContext<TransactionApiFormSchema>();
-  const { categoryOptions, onCreateCategory, disabled } = useContext(TransactionFormContext);
+  const { disabled } = useContext(TransactionFormContext);
 
   return (
     <FormField
@@ -19,13 +19,10 @@ export const CategorySelect: React.FC = () => {
         <FormItem>
           <FormLabel>Category</FormLabel>
           <FormControl>
-            <Select
-              placeholder="Select an category"
-              options={categoryOptions}
-              onChange={field.onChange}
-              onCreate={onCreateCategory}
-              value={field.value}
+            <EntityCategorySelect
               disabled={disabled}
+              onChange={field.onChange}
+              value={field.value || ''}
             />
           </FormControl>
         </FormItem>

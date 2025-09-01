@@ -1,9 +1,8 @@
 import { CellContext } from '@tanstack/react-table';
 
-import { Transaction } from '@/entities/transactions';
 import { Checkbox } from '@/shared/ui/checkbox';
 
-export const SelectCell = ({ row }: CellContext<Transaction, unknown>) => {
+export function SelectCell<TData, TValue>({ row }: CellContext<TData, TValue>) {
   return (
     <Checkbox
       checked={row.getIsSelected()}

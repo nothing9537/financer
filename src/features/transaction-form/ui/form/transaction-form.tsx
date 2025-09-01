@@ -19,11 +19,7 @@ import { AmountInput } from './amount-input';
 import { NotesTextarea } from './notes-textarea';
 
 export const TransactionFormContext = createContext<TransactionFormProps>({
-  accountOptions: [],
-  categoryOptions: [],
-  onCreateAccount: () => { },
-  onCreateCategory: () => { },
-  onSubmit: () => { }
+  onSubmit: () => { },
 });
 
 export const TransactionForm = (props: TransactionFormProps) => {

@@ -10,11 +10,11 @@ export const CategoriesHeader: React.FC = () => {
   const sheet = useSheet<'new-category'>();
 
   return (
-    <CardHeader className='gap-y-2'>
+    <CardHeader className='gap-y-2 lg:grid-rows-1 lg:grid-cols-2'>
       <CardTitle className='text-xl line-clamp-1'>
         Categories page
       </CardTitle>
-      <Button size='sm' onClick={() => sheet.onOpen('new-category')}>
+      <Button size='sm' onClick={() => sheet.onOpen('new-category')} className='lg:ml-auto w-full lg:w-fit'>
         <Plus className='size-4 mr-2' />
         Add new
       </Button>
