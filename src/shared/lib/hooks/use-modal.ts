@@ -3,7 +3,7 @@ import { TxShape } from '@/features/csv-import-button';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
 
-const MODAL_TYPES = ['create-category-confirmation'] as const;
+const MODAL_TYPES = ['create-category-confirmation', 'apply-account-modal'] as const;
 export type ModalType = (typeof MODAL_TYPES)[number];
 
 interface CreateCategoryConfirmationModalData {
@@ -14,6 +14,7 @@ interface CreateCategoryConfirmationModalData {
 
 type ModalDataMap = {
   'create-category-confirmation': CreateCategoryConfirmationModalData;
+  'apply-account-modal': undefined;
 }
 
 interface ModalState {

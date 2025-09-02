@@ -7,7 +7,7 @@ import { useCreateAccount } from '../api/use-create-account';
 
 type AccountSelectProps = {
   disabled?: boolean;
-  onChange: (value?: string) => void;
+  onChange: (value?: string, label?: string) => void;
   value: string;
 }
 

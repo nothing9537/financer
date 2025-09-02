@@ -7,7 +7,7 @@ import CreatableSelect from 'react-select/creatable';
 import { SelectOption } from '@/shared/types/select-option';
 
 export type SelectProps<TValue = string> = {
-  onChange: (value?: TValue) => void;
+  onChange: (value?: TValue, label?: string) => void;
   onCreate?: (value: TValue) => void;
   options?: SelectOption<TValue>[];
   value?: TValue | null | undefined;
@@ -17,7 +17,7 @@ export type SelectProps<TValue = string> = {
 
 export function Select<TValue = string>({ onChange, onCreate, options = [], value, disabled, placeholder }: SelectProps<TValue>) {
   const onSelect = (option: SingleValue<SelectOption<TValue>>) => {
-    onChange(option?.value)
+    onChange(option?.value, option?.label);
   };
 
   const formattedValue = useMemo(() => options.find((option) => option.value === value), [options, value]);
