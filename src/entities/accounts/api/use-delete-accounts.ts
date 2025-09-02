@@ -1,9 +1,9 @@
-import { InferResponseType } from 'hono';
-
-import { client } from '@/shared/api/hono/client';
-import { ACCOUNTS_QUERY_KEY } from '@/shared/lib/consts/query-keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { InferResponseType } from 'hono';
 import { toast } from 'sonner';
+
+import { ACCOUNT_QUERY_KEY, ACCOUNTS_QUERY_KEY, TRANSACTIONS_QUERY_KEY } from '@/shared/lib/consts/query-keys';
+import { client } from '@/shared/api/hono/client';
 
 type ResponseType = InferResponseType<typeof client.api.accounts[":id"]['$delete']>;
 
@@ -15,14 +15,16 @@ export const useDeleteAccount = (id?: string) => {
       const response = await client.api.accounts[':id']['$delete']({ param: { id } });
 
       if (!response.ok) {
-        throw new Error('Failed to create account');
+        throw new Error('Failed to delete account');
       }
 
       return await response.json();
     },
     onSuccess: () => {
       toast.success("Account deleted");
-      queryClient.refetchQueries({ queryKey: ACCOUNTS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: ACCOUNTS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: ACCOUNT_QUERY_KEY(id) });
+      queryClient.invalidateQueries({ queryKey: TRANSACTIONS_QUERY_KEY });
     },
     onError: (error) => {
       toast.error(error.message || "Failed to delete account");

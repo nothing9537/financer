@@ -5,15 +5,12 @@ import { useBulkDeleteAccounts, useGetAccounts } from '@/entities/accounts';
 import { useBulkDeleteCategories, useGetCategories } from '@/entities/categories';
 
 import { accountsColumns, categoriesColumns } from '../../lib/consts/columns';
-import { useMountedState } from 'react-use';
 
 interface EntityTableProps {
   entity: 'account' | 'category';
 }
 
 export const EntityTable: React.FC<EntityTableProps> = ({ entity }) => {
-  const mounted = useMountedState();
-
   const query = entity === 'account' ? useGetAccounts : useGetCategories;
   const bulkDelete = entity === 'account' ? useBulkDeleteAccounts : useBulkDeleteCategories;
   const columns = entity === 'account' ? accountsColumns : categoriesColumns;
@@ -23,10 +20,6 @@ export const EntityTable: React.FC<EntityTableProps> = ({ entity }) => {
 
   const entityData = entityQuery.data || [];
   const disabled = entityQuery.isLoading || deleteEntityMutation.isPending;
-
-  if (!mounted) {
-    return null;
-  }
 
   return (
     <DataTable

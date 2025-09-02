@@ -1,14 +1,14 @@
-import { AccountFormSchemaType } from '@/features/account-form';
 import { useDeleteAccount, useEditAccount } from '@/entities/accounts';
 import { useDeleteCategory, useEditCategory } from '@/entities/categories';
 import { useSheet } from '@/shared/lib/hooks/use-sheet';
 import { useConfirm } from '@/shared/lib/hooks/use-confirm';
+import { EntitySchema } from '@/features/entity-form';
 
 export const useEditEntitySheet = (entity: 'account' | 'category') => {
   const editEntity = entity === 'account' ? useEditAccount : useEditCategory;
   const deleteEntity = entity === 'account' ? useDeleteAccount : useDeleteCategory;
 
-  const sheet = useSheet();
+  const sheet = useSheet<'edit-account'>();
   const editMutation = editEntity(sheet.data?.id);
   const deleteMutation = deleteEntity(sheet.data?.id);
   const [ConfirmDialog, confirm] = useConfirm({
@@ -18,7 +18,7 @@ export const useEditEntitySheet = (entity: 'account' | 'category') => {
 
   const isPending = editMutation.isPending || deleteMutation.isPending;
 
-  const handleSubmit = (data: AccountFormSchemaType) => {
+  const handleSubmit = (data: EntitySchema) => {
     editMutation.mutate(data, {
       onSuccess: () => {
         sheet.onClose();

@@ -10,11 +10,11 @@ export const AccountsHeader: React.FC = () => {
   const sheet = useSheet<'new-account'>();
 
   return (
-    <CardHeader className='gap-y-2'>
+    <CardHeader className='gap-y-2 lg:grid-rows-1 lg:grid-cols-2'>
       <CardTitle className='text-xl line-clamp-1'>
         Accounts page
       </CardTitle>
-      <Button size='sm' onClick={() => sheet.onOpen('new-account')}>
+      <Button size='sm' onClick={() => sheet.onOpen('new-account')} className='ml-auto w-full lg:w-fit'>
         <Plus className='size-4 mr-2' />
         Add new
       </Button>

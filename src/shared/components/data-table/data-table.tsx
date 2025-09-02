@@ -31,9 +31,10 @@ interface DataTableProps<TData, TValue> {
   onDelete?: (rows: Row<TData>[]) => void;
   disabled?: boolean;
   isLoading?: boolean;
+  extraActions?: React.ReactNode;
 }
 
-export function DataTable<TData, TValue>({ columns, data, filter, disabled, onDelete, isLoading }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, filter, disabled, onDelete, isLoading, extraActions }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [rowSelection, setRowSelection] = React.useState({});
@@ -41,21 +42,28 @@ export function DataTable<TData, TValue>({ columns, data, filter, disabled, onDe
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getCoreRowModel: getCoreRowModel(),
     onColumnFiltersChange: setColumnFilters,
-    onSortingChange: setSorting,
     onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
     state: { sorting, columnFilters, rowSelection },
   });
+
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
 
   return (
     <div>
       <div className="flex items-center justify-between py-4">
         <DataTableFilter table={table} filter={filter} />
-        <DataTableDeleteButton table={table} disabled={disabled} onDelete={onDelete} />
+        <div className='flex items-center gap-x-2'>
+          {extraActions}
+          <DataTableDeleteButton table={table} disabled={disabled} onDelete={onDelete} />
+        </div>
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>

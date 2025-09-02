@@ -71,7 +71,7 @@ const app = new Hono()
     const [data] = await db.insert(categories).values({
       id: uuidv4(),
       userId: auth.userId,
-      name: values.name,
+      ...values,
     }).returning();
 
     return ctx.json({ payload: data }, 201);

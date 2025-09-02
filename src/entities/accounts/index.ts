@@ -5,4 +5,6 @@ export { useEditAccount } from './api/use-edit-account';
 export { useBulkDeleteAccounts } from './api/use-bulk-delete';
 export { useDeleteAccount } from './api/use-delete-accounts';
 
+export { AccountSelect } from './ui/account-select';
+
 export type { Account } from './model/types';
