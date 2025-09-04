@@ -3,10 +3,12 @@ import { accounts, transactions } from '@/schemas';
 import { and, eq, gte, lte, sql, sum } from 'drizzle-orm';
 
 export async function fetchFinancialData(userId: string, startDate: Date, endDate: Date, accountId?: string) {
+  console.log(userId, accountId);
+
   return await db
     .select({
-      income: sql`SUM(SUM CASE WHEN ${transactions.amount} >= 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(Number),
-      expenses: sql`SUM(SUM CASE WHEN ${transactions.amount} < 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(Number),
+      income: sql`SUM(CASE WHEN ${transactions.amount} >= 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(Number),
+      expenses: sql`SUM(CASE WHEN ${transactions.amount} < 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(Number),
       remaining: sum(transactions.amount).mapWith(Number)
     })
     .from(transactions)

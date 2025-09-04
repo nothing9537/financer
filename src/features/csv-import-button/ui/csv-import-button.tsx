@@ -5,6 +5,8 @@ import * as React from 'react';
 import { Loader2, Upload } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 
+import { useGetCategories } from '@/entities/categories';
+
 import { parseCsvFileClient } from '../lib/papaparse-client';
 import { normalizeRowsToTxShape } from '../lib/parse';
 import type { TxShape } from '../model/types';
@@ -20,6 +22,7 @@ export const CSVImportButton: React.FC<CSVImportButtonProps> = ({
 }) => {
   const fileRef = React.useRef<HTMLInputElement>(null);
   const [isBusy, setIsBusy] = React.useState(false);
+  const { data } = useGetCategories();
 
   const openPicker = () => {
     onPickerOpen?.();
@@ -33,7 +36,18 @@ export const CSVImportButton: React.FC<CSVImportButtonProps> = ({
     setIsBusy(true);
     try {
       const rawRows = await parseCsvFileClient(file);
-      const out: TxShape[] = normalizeRowsToTxShape(rawRows);
+      const out: TxShape[] = data
+        ? normalizeRowsToTxShape(rawRows).map((t) => {
+          const category = data.find((c) => c.name === t.category);
+
+          if (category) {
+            return { ...t, categoryId: category.id }
+          }
+
+          return t;
+        })
+        : normalizeRowsToTxShape(rawRows);
+
       onImport?.(out);
     } finally {
       setIsBusy(false);

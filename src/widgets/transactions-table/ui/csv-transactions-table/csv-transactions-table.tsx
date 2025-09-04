@@ -27,7 +27,7 @@ export const CSVTransactionsTable: React.FC<CSVTableProps> = ({ dataShape }) => 
           placeholder: 'Filter transaction by payee...'
         }}
       />
-      <ExportCSVTransactionButton />
+      
     </>
   );
 };

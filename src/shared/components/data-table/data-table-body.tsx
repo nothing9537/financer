@@ -5,7 +5,7 @@ import { ColumnDef, flexRender } from '@tanstack/react-table';
 import { TableBody, TableCell, TableRow } from '@/shared/ui/table';
 
 import { DataTableElementProps } from './types';
-import { SkeletonTableLoader } from '../skeleton-table-loader-fallback';
+import { SkeletonTableLoader } from './skeleton-table-loader-fallback';
 
 interface DataTableBodyProps<TData, TValue> extends DataTableElementProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

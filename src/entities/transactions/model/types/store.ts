@@ -8,4 +8,5 @@ export interface CSVTransactionsStore {
   updateSingle: (transaction: TxShape) => void;
   removeSingle: (id: string) => void;
   bulkRemove: (ids: string[]) => void;
+  categoryBulkUpdate: (categoryId: string, category: string) => void;
 }

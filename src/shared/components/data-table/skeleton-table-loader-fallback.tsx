@@ -1,6 +1,7 @@
 import * as React from "react";
-import { cn } from "../lib/utils/cn";
-import { Skeleton } from "../ui/skeleton";
+
+import { cn } from '@/shared/lib/utils/cn';
+import { Skeleton } from '@/shared/ui/skeleton';
 
 type OwnProps = {
   count: number;

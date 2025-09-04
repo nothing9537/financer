@@ -18,4 +18,7 @@ export const useCSVTransactionsStore = create<CSVTransactionsStore>()(devtools((
       return updated || tx;
     })
   })),
+  categoryBulkUpdate: (categoryId: string, category: string) => set((state) => ({
+    data: state.data.map((tx) => (tx.category === category ? { ...tx, category, categoryId } : tx)),
+  })),
 })));

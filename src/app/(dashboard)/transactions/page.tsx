@@ -1,12 +1,13 @@
 'use client';
 
+import { memo, useState } from 'react';
 import { Card, CardContent } from '@/shared/ui/card';
 
-import { TransactionsPageHeader } from './components/categories-header';
 import { CSVTransactionsTable, TransactionsTable } from '@/widgets/transactions-table';
-import { memo, useState } from 'react';
-import { TxShape } from '@/features/csv-import-button';
+import { ExportCSVTransactionButton } from '@/features/export-csv-transactions';
 import { useCSVTransactionsStore } from '@/entities/transactions';
+
+import { TransactionsPageHeader } from './components/categories-header';
 
 export enum TABLE_STATE {
   VIEW = 'view',
@@ -15,7 +16,7 @@ export enum TABLE_STATE {
 
 const TransactionsPage: React.FC = () => {
   const [tableState, setTableState] = useState(TABLE_STATE.VIEW);
-  const { data } = useCSVTransactionsStore();
+  const { data, clearData } = useCSVTransactionsStore();
 
   return (
     <div className='max-w-screen-2xl mx-auto w-full pb-10 -mt-24'>
@@ -26,7 +27,17 @@ const TransactionsPage: React.FC = () => {
         />
         <CardContent>
           {tableState === TABLE_STATE.VIEW && <TransactionsTable />}
-          {tableState === TABLE_STATE.CSV_IMPORT && <CSVTransactionsTable dataShape={data} />}
+          {tableState === TABLE_STATE.CSV_IMPORT && (
+            <>
+              <CSVTransactionsTable dataShape={data} />
+              <ExportCSVTransactionButton
+                successAction={() => {
+                  clearData();
+                  setTableState(TABLE_STATE.VIEW);
+                }}
+              />
+            </>
+          )}
         </CardContent>
       </Card>
     </div>

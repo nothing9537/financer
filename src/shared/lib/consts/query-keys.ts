@@ -6,3 +6,5 @@ export const CATEGORY_QUERY_KEY = (categoryId?: string) => ['categories', { id: 
 
 export const TRANSACTIONS_QUERY_KEY = ['transactions'] as const;
 export const TRANSACTION_QUERY_KEY = (transactionId?: string) => ['transactions', { id: transactionId }];
+
+export const SUMMARY_QUERY_KEY = ['summary'] as const;
