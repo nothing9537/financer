@@ -64,7 +64,7 @@ const app = new Hono()
           categories.id,
         )
       )
-      .where(
+      .where( 
         and(
           accountId ? eq(transactions.accountId, accountId) : undefined,
           eq(accounts.userId, auth.userId),
@@ -86,7 +86,7 @@ const app = new Hono()
 
     const finalCategories = topCategories;
 
-    if (otherCategories.length > 3) {
+    if (otherCategories.length > 0) {
       finalCategories.push({
         name: 'Other',
         value: otherSum,

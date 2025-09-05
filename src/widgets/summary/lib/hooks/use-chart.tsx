@@ -1,25 +1,16 @@
 import { useCallback, useState } from 'react';
-import { AreaChart } from '../../ui/summary-charts/area-chart';
-import { DayPoint } from '../../model/types';
-import { BarChart } from '../../ui/summary-charts/bar-chart';
-import { LineChart } from '../../ui/summary-charts/line-chart';
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
-import { AreaChartIcon, BarChartIcon, LineChartIcon } from 'lucide-react';
 
-export type ChartType = 'area' | 'bar' | 'line';
+import { ChartType, UseChartArgs, ChartDataType } from '../../model/types';
+import { ChartTypeToSelectItemMap, ChartTypeToUIMap } from '../consts/mappers';
 
-const chartTypeMap: Record<ChartType, React.FC<{ data: DayPoint[] }>> = {
-  'area': AreaChart,
-  'bar': BarChart,
-  'line': LineChart,
-};
+export function useChart<T extends ChartType>({ charts, defaultValue }: UseChartArgs<T>) {
+  const [chartType, setChartType] = useState<T>(defaultValue ?? charts[0]);
 
-export const useChart = () => {
-  const [chartType, setChartType] = useState<ChartType>('area');
-
-  const onChartTypeChange = useCallback((chartType: ChartType) => {
-    if (chartType) {
-      setChartType(chartType);
+  const onChartTypeChange = useCallback((newType: T) => {
+    if (newType) {
+      setChartType(newType);
     }
   }, []);
 
@@ -30,31 +21,25 @@ export const useChart = () => {
           <SelectValue placeholder='Chart type' />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value='area'>
-            <div className='flex items-center'>
-              <AreaChartIcon className='size-4 mr-2 shrink-0' />
-              <p className='line-clamp-1'>Area Chart</p>
-            </div>
-          </SelectItem>
-          <SelectItem value='bar'>
-            <div className='flex items-center'>
-              <BarChartIcon className='size-4 mr-2 shrink-0' />
-              <p className='line-clamp-1'>Bar Chart</p>
-            </div>
-          </SelectItem>
-          <SelectItem value='line'>
-            <div className='flex items-center'>
-              <LineChartIcon className='size-4 mr-2 shrink-0' />
-              <p className='line-clamp-1'>Line Chart</p>
-            </div>
-          </SelectItem>
+          {charts.map((type) => {
+            const { Icon, label, value } = ChartTypeToSelectItemMap[type];
+
+            return (
+              <SelectItem value={value} key={type}>
+                <div className='flex items-center'>
+                  <Icon className='size-4 mr-2 shrink-0' />
+                  <p className='line-clamp-1'>{label}</p>
+                </div>
+              </SelectItem>
+            )
+          })}
         </SelectContent>
       </Select>
     )
   };
 
   return {
-    Chart: chartTypeMap[chartType],
+    Chart: ChartTypeToUIMap[chartType] as React.FC<{ data: ChartDataType<T>[] }>,
     Select: ChartSelect,
   } as const;
 };

@@ -3,8 +3,6 @@ import { accounts, transactions } from '@/schemas';
 import { and, eq, gte, lte, sql, sum } from 'drizzle-orm';
 
 export async function fetchFinancialData(userId: string, startDate: Date, endDate: Date, accountId?: string) {
-  console.log(userId, accountId);
-
   return await db
     .select({
       income: sql`SUM(CASE WHEN ${transactions.amount} >= 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(Number),
