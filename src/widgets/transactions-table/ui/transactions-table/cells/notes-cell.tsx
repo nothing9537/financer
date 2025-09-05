@@ -3,7 +3,7 @@ import { CellContext } from '@tanstack/react-table';
 import { Transaction } from '@/entities/transactions';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
 
-export const NotesCell = ({ row }: CellContext<Transaction, unknown>) => {
+export const NotesCell = ({ row }: CellContext<Transaction, Transaction[]>) => {
   if (!row.original.notes) {
     return <span>No notes</span>;
   }

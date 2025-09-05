@@ -15,6 +15,7 @@ export const CategoryCreateConfirmationModal: React.FC = () => {
       mutation.mutate({
         name: data.transaction.category
       }, {
+        //@ts-expect-error additional check for types in hook
         onSuccess: ({ payload }) => {
           onClose();
           data?.onConfirm?.({ name: payload.name, id: payload.id });

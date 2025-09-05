@@ -1,0 +1,1 @@
+export type DayPoint = { date: string, expenses: number; income: number; }

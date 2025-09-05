@@ -15,8 +15,9 @@ import { AmountCell } from '../../ui/transactions-table/cells/amount-cell';
 import { AccountCell } from '../../ui/transactions-table/cells/account-cell';
 import { CategoryCell } from '../../ui/transactions-table/cells/category-cell';
 import { NotesCell } from '../../ui/transactions-table/cells/notes-cell';
+import { PayeeCell } from '../../ui/transactions-table/cells/payee-cell';
 
-export const columns: ColumnDef<Transaction>[] = [
+export const columns: ColumnDef<Transaction, Transaction[]>[] = [
   {
     id: "select",
     header: SelectHeader,
@@ -38,6 +39,7 @@ export const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: 'payee',
     header: PayeeHeader,
+    cell: PayeeCell,
   },
   {
     accessorKey: 'amount',

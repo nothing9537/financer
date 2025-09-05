@@ -33,6 +33,7 @@ export const SummaryCards: React.FC = () => {
         Icon={FaArrowTrendUp}
         dateRangeLabel={dateRangeLabel}
         isLoading={isLoading}
+        variant='success'
       />
       <SummaryCard
         title='Expenses'
@@ -41,6 +42,7 @@ export const SummaryCards: React.FC = () => {
         Icon={FaArrowTrendDown}
         dateRangeLabel={dateRangeLabel}
         isLoading={isLoading}
+        variant='danger'
       />
     </DataGrid>
   )
