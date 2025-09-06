@@ -44,7 +44,7 @@ export const CategoryCreateConfirmationModal: React.FC = () => {
           <Button onClick={handleCancel} variant="outline" disabled={mutation.isPending}>
             Cancel
           </Button>
-          <Button onClick={handleConfirm} disabled={mutation.isPending}>
+          <Button onClick={handleConfirm} disabled={mutation.isPending} autoFocus>
             Confirm
           </Button>
         </DialogFooter>
