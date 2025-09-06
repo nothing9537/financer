@@ -1,4 +1,6 @@
 import { format, subDays } from 'date-fns';
+import { ReadonlyURLSearchParams } from 'next/navigation';
+import qs from 'query-string';
 
 export const formatAmount = (value: number) => Intl.NumberFormat("en-US", {
   style: 'currency',
@@ -36,4 +38,16 @@ export const formatPercentage = (value: number, options: { addPrefix?: boolean }
   }
 
   return res;
+}
+
+
+const KEYS = ['accountId', 'from', 'to'] as const;
+
+export function withFilters(href: string, params: ReadonlyURLSearchParams) {
+  const query: Record<string, string> = {};
+  for (const k of KEYS) {
+    const v = params.get(k);
+    if (v) query[k] = v;
+  }
+  return qs.stringifyUrl({ url: href, query }, { skipEmptyString: true, skipNull: true });
 }

@@ -6,7 +6,7 @@ import { TRANSACTION_QUERY_KEY } from '@/shared/lib/consts/query-keys';
 export const useGetTransaction = (id?: string) => {
   const query = useQuery({
     enabled: !!id,
-    queryKey: TRANSACTION_QUERY_KEY(id || ''),
+    queryKey: TRANSACTION_QUERY_KEY({ accountId: id }),
     queryFn: async () => {
       const response = await client.api.transactions[':id'].$get({
         param: { id },

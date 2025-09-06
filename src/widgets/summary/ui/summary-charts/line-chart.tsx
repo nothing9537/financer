@@ -20,14 +20,14 @@ export const LineChart: React.FC<{ data: DayPoint[] }> = ({ data }) => {
         />
         <Tooltip content={CustomChartTooltip} />
         <Line
-          dot
+          dot={false}
           dataKey='income'
           stroke='#3d82f6'
           strokeWidth={2}
           className='drop-shadow-sm'
         />
         <Line
-          dot
+          dot={false}
           dataKey='expenses'
           stroke='#f43f5e'
           strokeWidth={2}

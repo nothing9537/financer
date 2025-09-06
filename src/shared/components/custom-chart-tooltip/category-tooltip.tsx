@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import type { TooltipContentProps } from 'recharts/types/component/Tooltip';
 
 import { formatAmount } from '@/shared/lib/utils/format';
@@ -10,7 +9,7 @@ export const CategoryTooltip = ({ active, payload }: TooltipContentProps<number,
   }
 
   const name = payload[0].payload.name as string;
-  const value = payload[0].value as number;
+  const value = payload[0].payload.value as number;
 
   return (
     <div className='rounded-sm bg-white shadow-sm border overflow-hidden'>

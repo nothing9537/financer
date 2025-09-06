@@ -18,6 +18,13 @@ const getQueryValidator = zValidator('query', z.object({
   accountId: z.string().optional(),
 }));
 
+const catSumMU = sql<number>`SUM(ABS(${transactions.amount}))`;
+const totalOverMU = sql<number>`SUM(SUM(ABS(${transactions.amount}))) OVER ()`;
+const shareExpr = sql<number>`
+  (SUM(ABS(${transactions.amount}))::numeric
+   / NULLIF(SUM(SUM(ABS(${transactions.amount}))) OVER (), 0)::numeric)
+`;
+
 const app = new Hono()
   .get("/", clerkMiddleware(), getQueryValidator, async (ctx) => {
     const auth = getAuth(ctx);
@@ -44,54 +51,98 @@ const app = new Hono()
     const expensesChange = calculatePercentageChange(currentPeriod.expenses, lastPeriod.expenses);
     const remainingChange = calculatePercentageChange(currentPeriod.remaining, lastPeriod.remaining);
 
-    const category = await db
+    // const category = await db
+    //   .select({
+    //     name: categories.name,
+    //     value: sql`SUM(ABS(${transactions.amount}))`.mapWith(Number),
+    //   })
+    //   .from(transactions)
+    //   .innerJoin(
+    //     accounts,
+    //     eq(
+    //       transactions.accountId,
+    //       accounts.id,
+    //     )
+    //   )
+    //   .innerJoin(
+    //     categories,
+    //     eq(
+    //       transactions.categoryId,
+    //       categories.id,
+    //     )
+    //   )
+    //   .where(
+    //     and(
+    //       accountId ? eq(transactions.accountId, accountId) : undefined,
+    //       eq(accounts.userId, auth.userId),
+    //       lt(transactions.amount, 0),
+    //       gte(transactions.date, startDate),
+    //       lte(transactions.date, endDate),
+    //     ),
+    //   )
+    //   .groupBy(categories.name)
+    //   .orderBy(
+    //     desc(
+    //       sql`SUM(ABS(${transactions.amount}))`,
+    //     ),
+    //   );
+
+    const rows = await db
       .select({
         name: categories.name,
-        value: sql`SUM(ABS(${transactions.amount}))`.mapWith(Number),
+        // сумма расходов категории в milliunits (как и хранишь в БД)
+        valueMu: catSumMU.mapWith(Number),
+        // общий расход (одно и то же число прилетит в каждой строке; можно не использовать и посчитать на бэке)
+        totalMu: totalOverMU.mapWith(Number),
+        // доля категории (0..1)
+        share: shareExpr.mapWith(Number),
       })
       .from(transactions)
-      .innerJoin(
-        accounts,
-        eq(
-          transactions.accountId,
-          accounts.id,
-        )
-      )
-      .innerJoin(
-        categories,
-        eq(
-          transactions.categoryId,
-          categories.id,
-        )
-      )
-      .where( 
+      .innerJoin(accounts, eq(transactions.accountId, accounts.id))
+      .innerJoin(categories, eq(transactions.categoryId, categories.id))
+      .where(
         and(
           accountId ? eq(transactions.accountId, accountId) : undefined,
           eq(accounts.userId, auth.userId),
-          lt(transactions.amount, 0),
+          lt(transactions.amount, 0),                   // только расходы
           gte(transactions.date, startDate),
           lte(transactions.date, endDate),
         ),
       )
       .groupBy(categories.name)
-      .orderBy(
-        desc(
-          sql`SUM(ABS(${transactions.amount}))`,
-        ),
-      );
+      .orderBy(desc(catSumMU));
 
-    const topCategories = category.slice(0, 3);
-    const otherCategories = category.slice(3);
-    const otherSum = otherCategories.reduce((acc, curr) => acc + curr.value, 0);
+    // const topCategories = category.slice(0, 5);
+    // const otherCategories = category.slice(5);
+    // const otherSum = otherCategories.reduce((acc, curr) => acc + curr.value, 0);
 
-    const finalCategories = topCategories;
+    // const finalCategories = topCategories;
 
-    if (otherCategories.length > 0) {
-      finalCategories.push({
-        name: 'Other',
-        value: otherSum,
-      })
-    }
+    // if (otherCategories.length > 0) {
+    //   finalCategories.push({
+    //     name: 'Other',
+    //     value: otherSum,
+    //   })
+    // }
+
+    const totalMu = rows[0]?.totalMu ?? 0;
+
+    const top = rows.slice(0, 5);
+    const rest = rows.slice(5);
+
+    const otherMu = rest.reduce((acc, r) => acc + r.valueMu, 0);
+    const otherShare = totalMu ? otherMu / totalMu : 0;
+
+    const finalCategories = [
+      ...top.map(r => ({
+        name: r.name,
+        value: r.valueMu,
+        share: r.share,
+      })),
+      ...(otherMu > 0
+        ? [{ name: 'Other', value: otherMu, share: otherShare }]
+        : []),
+    ];
 
     const activeDays = await db
       .select({
@@ -131,7 +182,7 @@ const app = new Hono()
         categories: finalCategories,
         days,
       }
-    }, 200)
+    }, 200);
   });
 
 export default app;

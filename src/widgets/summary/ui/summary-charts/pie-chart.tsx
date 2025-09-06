@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ResponsiveContainer, PieChart as RePieChart, Legend, Pie, Cell, Tooltip } from 'recharts';
 
 import { formatPercentage } from '@/shared/lib/utils/format';
@@ -18,8 +19,6 @@ export const PieChart: React.FC<{ data: CategoryPoint[] }> = ({ data }) => {
           content={({ payload }) => (
             <ul className='flex flex-col space-y-2'>
               {payload?.map((entry, index: number) => {
-                console.log(entry);
-
                 return (
                   <li
                     key={`item-${index}`}
@@ -31,7 +30,7 @@ export const PieChart: React.FC<{ data: CategoryPoint[] }> = ({ data }) => {
                         {entry.value}
                       </span>
                       <span className='text-sm'>
-                        {formatPercentage(entry.payload?.value * 100)}
+                        {formatPercentage((entry.payload as any)?.share * 100)}
                       </span>
                     </div>
                   </li>
@@ -49,7 +48,7 @@ export const PieChart: React.FC<{ data: CategoryPoint[] }> = ({ data }) => {
           innerRadius={60}
           paddingAngle={2}
           fill='#8884d8'
-          dataKey='value'
+          dataKey='share'
           labelLine={false}
         >
           {data.map((_entry, index) => (

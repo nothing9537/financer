@@ -2,7 +2,7 @@ import { toast } from 'sonner';
 import { InferRequestType, InferResponseType } from 'hono';
 
 import { client } from '@/shared/api/hono/client';
-import { TRANSACTIONS_QUERY_KEY, TRANSACTION_QUERY_KEY } from '@/shared/lib/consts/query-keys';
+import { SUMMARY_QUERY_KEY, TRANSACTIONS_QUERY_KEY, TRANSACTION_QUERY_KEY } from '@/shared/lib/consts/query-keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type ResponseType = InferResponseType<typeof client.api.transactions[":id"]['$patch']>;
@@ -24,7 +24,8 @@ export const useEditTransaction = (id?: string) => {
     onSuccess: () => {
       toast.success("Transaction updated");
       queryClient.invalidateQueries({ queryKey: TRANSACTIONS_QUERY_KEY });
-      queryClient.invalidateQueries({ queryKey: TRANSACTION_QUERY_KEY(id) });
+      queryClient.invalidateQueries({ queryKey: TRANSACTION_QUERY_KEY({ id }) });
+      queryClient.invalidateQueries({ queryKey: SUMMARY_QUERY_KEY });
     },
     onError: (error) => {
       toast.error(error.message || "Failed to update transaction");

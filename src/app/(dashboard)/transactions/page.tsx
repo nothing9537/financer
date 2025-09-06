@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useState } from 'react';
+import { memo, Suspense, useState } from 'react';
 import { Card, CardContent } from '@/shared/ui/card';
 
 import { CSVTransactionsTable, TransactionsTable } from '@/widgets/transactions-table';
@@ -26,18 +26,20 @@ const TransactionsPage: React.FC = () => {
           tableState={tableState}
         />
         <CardContent>
-          {tableState === TABLE_STATE.VIEW && <TransactionsTable />}
-          {tableState === TABLE_STATE.CSV_IMPORT && (
-            <>
-              <CSVTransactionsTable dataShape={data} />
-              <ExportCSVTransactionButton
-                successAction={() => {
-                  clearData();
-                  setTableState(TABLE_STATE.VIEW);
-                }}
-              />
-            </>
-          )}
+          <Suspense>
+            {tableState === TABLE_STATE.VIEW && <TransactionsTable />}
+            {tableState === TABLE_STATE.CSV_IMPORT && (
+              <>
+                <CSVTransactionsTable dataShape={data} />
+                <ExportCSVTransactionButton
+                  successAction={() => {
+                    clearData();
+                    setTableState(TABLE_STATE.VIEW);
+                  }}
+                />
+              </>
+            )}
+          </Suspense>
         </CardContent>
       </Card>
     </div>

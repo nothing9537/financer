@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 
 import { client } from '@/shared/api/hono/client';
-import { SUMMARY_QUERY_KEY } from '@/shared/lib/consts/query-keys';
+import { SUMMARY_QUERY_KEYS } from '@/shared/lib/consts/query-keys';
 import { convertAmountFromMilliunits } from '@/shared/lib/utils/math';
 
 export const useGetSummary = () => {
@@ -14,7 +14,7 @@ export const useGetSummary = () => {
   const accountId = params.get('accountId') || "";
 
   const query = useQuery({
-    queryKey: SUMMARY_QUERY_KEY,
+    queryKey: SUMMARY_QUERY_KEYS({ accountId, from, to }),
     queryFn: async () => {
       const response = await client.api.summary.$get({
         query: {

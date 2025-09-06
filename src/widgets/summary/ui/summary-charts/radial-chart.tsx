@@ -49,7 +49,7 @@ export const RadialChart: React.FC<{ data: CategoryPoint[] }> = ({ data }) => {
                         {entry.value}
                       </span>
                       <span className='text-sm'>
-                        {formatAmount(entry.payload?.value)}
+                        -{formatAmount(entry.payload?.value)}
                       </span>
                     </div>
                   </li>

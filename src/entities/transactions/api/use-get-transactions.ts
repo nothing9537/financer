@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 
 import { client } from '@/shared/api/hono/client';
-import { TRANSACTIONS_QUERY_KEY } from '@/shared/lib/consts/query-keys';
+import { TRANSACTIONS_QUERY_KEYS } from '@/shared/lib/consts/query-keys';
 import { convertAmountFromMilliunits } from '@/shared/lib/utils/math';
 
 export const useGetTransactions = () => {
@@ -14,7 +14,7 @@ export const useGetTransactions = () => {
   const accountId = params.get('accountId') || "";
 
   const query = useQuery({
-    queryKey: TRANSACTIONS_QUERY_KEY,
+    queryKey: TRANSACTIONS_QUERY_KEYS({ accountId }),
     queryFn: async () => {
       const response = await client.api.transactions.$get({
         query: {
