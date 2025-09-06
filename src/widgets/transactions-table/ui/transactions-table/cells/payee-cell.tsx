@@ -5,26 +5,13 @@ import type { CellContext } from '@tanstack/react-table';
 import type { Transaction } from '@/entities/transactions';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
+import { useMedia } from 'react-use';
 
 const MAX_LEN = 40;
 
-function useCoarsePointer() {
-  const [coarse, setCoarse] = React.useState(false);
-  React.useEffect(() => {
-    const mq = window.matchMedia('(pointer: coarse)');
-    const update = () => setCoarse(mq.matches);
-    update();
-    mq.addEventListener ? mq.addEventListener('change', update) : mq.addListener(update);
-    return () => {
-      mq.removeEventListener ? mq.removeEventListener('change', update) : mq.removeListener(update );
-    };
-  }, []);
-  return coarse;
-}
-
 export function PayeeCell({ row }: CellContext<Transaction, unknown>) {
   const payee = (row.original.payee ?? '').trim();
-  const isMobile = useCoarsePointer();
+  const isMobile = useMedia('(max-width: 1024px)', false);
   if (!payee) return <span className="text-muted-foreground">—</span>;
 
   const long = payee.length > MAX_LEN;
