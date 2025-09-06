@@ -2,7 +2,7 @@ import { useBulkCreateTransactions, useCSVTransactionsStore } from '@/entities/t
 import { convertAmountToMilliunits } from '@/shared/lib/utils/math';
 import { useCallback, useMemo } from 'react';
 
-export const useExportCSVTransactions = () => {
+export const useExportCSVTransactions = (successAction?: () => void, errorAction?: () => void) => {
   const { data } = useCSVTransactionsStore();
   const mutation = useBulkCreateTransactions();
 
@@ -11,8 +11,15 @@ export const useExportCSVTransactions = () => {
     .filter((t) => t.accountId && t.date && t.payee && t.amount), [data]);
 
   const handleExport = useCallback(() => {
-    mutation.mutate(exportData);
-  }, [data, mutation]);
+    mutation.mutate(exportData, {
+      onSuccess: () => {
+        successAction?.();
+      },
+      onError: () => {
+        errorAction?.();
+      }
+    });
+  }, [data, mutation, errorAction, successAction]);
 
   return [handleExport, mutation, exportData] as const;
 }

@@ -6,10 +6,17 @@ import { CheckIcon } from "lucide-react"
 
 import { cn } from "@/shared/lib/utils/cn"
 
+interface CheckboxProps extends React.ComponentProps<typeof CheckboxPrimitive.Root> {
+  iconClassName?: string;
+  indicatorClassName?: string;
+}
+
 function Checkbox({
   className,
+  indicatorClassName,
+  iconClassName,
   ...props
-}: React.ComponentProps<typeof CheckboxPrimitive.Root>) {
+}: CheckboxProps) {
   return (
     <CheckboxPrimitive.Root
       data-slot="checkbox"
@@ -21,9 +28,9 @@ function Checkbox({
     >
       <CheckboxPrimitive.Indicator
         data-slot="checkbox-indicator"
-        className="flex items-center justify-center text-current transition-none"
+        className={cn("flex items-center justify-center text-current transition-none", indicatorClassName)}
       >
-        <CheckIcon className="size-3.5" />
+        <CheckIcon className={cn("size-3.5", iconClassName)} />
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   )

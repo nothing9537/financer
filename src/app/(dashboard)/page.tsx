@@ -1,7 +1,15 @@
-export default function Dashboard() {
+import { Suspense } from 'react';
+import { SummaryCards, SummaryCharts } from '@/widgets/summary';
+
+const Dashboard: React.FC = () => {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <p>Auth route</p>
+    <div className='max-w-screen-2xl mx-auto w-full pb-10 -mt-24'>
+      <Suspense>
+        <SummaryCards />
+        <SummaryCharts />
+      </Suspense>
     </div>
   );
 }
+
+export default Dashboard;

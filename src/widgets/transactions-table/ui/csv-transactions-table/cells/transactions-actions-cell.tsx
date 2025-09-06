@@ -19,7 +19,7 @@ export const CSVTransactionsActionsCell = ({ row }: Props): React.ReactElement =
   const editSheet = useSheet<'edit-csv-transaction'>();
   const { onOpen: openModal } = useModal<'create-category-confirmation'>();
   const { data: categories } = useGetCategories();
-  const { removeSingle, updateSingle } = useCSVTransactionsStore();
+  const { removeSingle, categoryBulkUpdate } = useCSVTransactionsStore();
   const [ConfirmDialog, confirm] = useConfirm({
     title: 'Are you sure?',
     description: 'You are about to delete this transaction.'
@@ -46,7 +46,8 @@ export const CSVTransactionsActionsCell = ({ row }: Props): React.ReactElement =
         transaction: tx,
         onConfirm: ({ name, id }) => {
           const updated = { ...tx, category: name, categoryId: id };
-          updateSingle(updated);
+          
+          categoryBulkUpdate(id, name);
           openEditSheet(updated);
         },
         onCancel: () => openEditSheet(tx),
@@ -55,7 +56,7 @@ export const CSVTransactionsActionsCell = ({ row }: Props): React.ReactElement =
     }
 
     openEditSheet({ ...tx, categoryId: category.id, category: category.name });
-  }, [tx, categories, openModal, updateSingle, openEditSheet]);
+  }, [tx, categories, openModal, openEditSheet, categoryBulkUpdate]);
 
   const handleDelete = useCallback(async () => {
     const ok = await confirm();

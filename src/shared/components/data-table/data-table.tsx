@@ -31,10 +31,10 @@ interface DataTableProps<TData, TValue> {
   onDelete?: (rows: Row<TData>[]) => void;
   disabled?: boolean;
   isLoading?: boolean;
-  extraActions?: React.ReactNode;
+  extraSelectionRenderActions?: React.ReactNode;
 }
 
-export function DataTable<TData, TValue>({ columns, data, filter, disabled, onDelete, isLoading, extraActions }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, filter, disabled, onDelete, isLoading, extraSelectionRenderActions: extraActions }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [rowSelection, setRowSelection] = React.useState({});

@@ -1,6 +1,5 @@
 'use client';
 
-import { ExportCSVTransactionButton } from '@/features/export-csv-transactions';
 import { useCSVTransactionsStore } from '@/entities/transactions';
 import { DataTable } from '@/shared/components/data-table';
 import { TxShape } from '@/features/csv-import-button';
@@ -16,18 +15,15 @@ export const CSVTransactionsTable: React.FC<CSVTableProps> = ({ dataShape }) => 
   const { bulkRemove } = useCSVTransactionsStore();
 
   return (
-    <>
-      <DataTable
-        columns={columns}
-        data={dataShape}
-        onDelete={(r) => bulkRemove(r.map((row) => row.original.id))}
-        extraActions={<ApplyAccountButton />}
-        filter={{
-          key: 'payee',
-          placeholder: 'Filter transaction by payee...'
-        }}
-      />
-      <ExportCSVTransactionButton />
-    </>
+    <DataTable
+      columns={columns}
+      data={dataShape}
+      onDelete={(r) => bulkRemove(r.map((row) => row.original.id))}
+      extraSelectionRenderActions={<ApplyAccountButton />}
+      filter={{
+        key: 'payee',
+        placeholder: 'Filter transaction by payee...'
+      }}
+    />
   );
 };

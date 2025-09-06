@@ -118,8 +118,6 @@ const app = new Hono()
       return ctx.json({ message: 'Unauthorized' }, 401);
     }
 
-    console.log(values);
-
     const data = await db
       .insert(transactions)
       .values(
