@@ -1,0 +1,1 @@
+export { PlaidConnectButton } from './ui/plaid-connect-button';
