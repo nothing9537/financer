@@ -186,7 +186,7 @@ const app = new Hono()
     const toInsert = rows
       .filter(r => !have.has(r.detailed))
       .map(r => ({
-        id: uuidv4(),
+        id: r.detailed,
         userId: auth.userId!,
         plaid_id: r.detailed,
         name: primaryAndDetailedLabel(r.primary, r.detailed),

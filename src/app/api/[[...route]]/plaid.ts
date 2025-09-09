@@ -211,7 +211,7 @@ const app = new Hono()
           const catRows = needInsertCodes.map((code) => {
             const pfc = pfcByCode.get(code)!;
             return {
-              id: buildPfcCategoryId(auth.userId, code),
+              id: code,
               name: prettifyPfc(pfc),
               userId: auth.userId,
               plaid_id: code,
@@ -340,7 +340,7 @@ const app = new Hono()
 
       if (pfcMap.size) {
         const catRows = [...pfcMap.entries()].map(([detailed, primary]) => ({
-          id: buildPfcCategoryId(bank.userId, detailed),
+          id: detailed,
           name: detailed ??
             primary.split('__').join(' / ').replaceAll('_', ' ')
               .toLowerCase().replace(/\b\w/g, s => s.toUpperCase()),
