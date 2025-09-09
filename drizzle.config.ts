@@ -11,7 +11,7 @@ const DB_URL = isProd ? process.env.PRODUCTION_DB_URL! : process.env.DEVELOPMENT
 
 export default defineConfig({
   schema: "./db/schemas/index.ts",
-  out: "./drizzle",
+  out: isProd ? "./drizzle" : "./drizzle-dev",
   dialect: 'postgresql',
   dbCredentials: {
     url: DB_URL,
