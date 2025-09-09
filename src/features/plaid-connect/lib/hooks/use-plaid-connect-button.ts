@@ -4,7 +4,7 @@ import { usePlaidLink } from 'react-plaid-link';
 import { useCreateLinkToken, useExchangePublicToken } from '@/entities/plaid';
 
 export const usePlaidConnectButton = () => {
-  const [token, setToken] = useState<string | null>(null)
+  const [token, setToken] = useState<string | null>(null);
 
   const createLinkTokenMutation = useCreateLinkToken();
   const exchangePublicTokenMutation = useExchangePublicToken();

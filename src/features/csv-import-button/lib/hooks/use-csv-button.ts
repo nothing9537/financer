@@ -6,12 +6,20 @@ import { normalizeRowsToTxShape } from '../parse';
 import type { TxShape } from '../../model/types';
 import type { CSVImportButtonProps } from '../../ui/csv-import-button';
 import { mapCategoryWithTfIdf } from '../map-category-with-tfidf';
+import { usePaywall } from '@/entities/subscriptions';
 
 export const useCSVButton = ({ onImport, onPickerOpen }: CSVImportButtonProps) => {
   const fileRef = React.useRef<HTMLInputElement>(null);
   const [isBusy, setIsBusy] = React.useState(false);
+  const { shouldBlock, triggerPaywall } = usePaywall();
 
   const openPicker = () => {
+    if (shouldBlock) {
+      triggerPaywall();
+
+      return;
+    }
+
     onPickerOpen?.();
     fileRef.current?.click();
   };
@@ -38,7 +46,7 @@ export const useCSVButton = ({ onImport, onPickerOpen }: CSVImportButtonProps) =
         if (hit) {
           return { ...t, categoryId: hit.id, category: hit.name };
         }
-        
+
         return t;
       });
 
