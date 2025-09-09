@@ -1,5 +1,3 @@
-// Aliases (English only) + header utils
-
 export const DATE_ALIASES = [
   'date', 'transaction date', 'posting date', 'post date',
   'book date', 'booking date', 'operation date', 'timestamp'
@@ -9,12 +7,13 @@ export const AMOUNT_ALIASES = [
   'amount', 'transaction amount', 'amt', 'sum', 'value'
 ] as const;
 
-export const DEBIT_ALIASES = ['debit', 'withdrawal', 'dr'] as const;
-export const CREDIT_ALIASES = ['credit', 'deposit', 'cr'] as const;
+export const DEBIT_ALIASES = ['debit', 'outflow', 'withdrawal', 'charge', 'money out'] as const;
+export const CREDIT_ALIASES = ['credit', 'inflow', 'deposit', 'money in', 'cr'] as const;
 
 export const DESC_ALIASES = [
   'description', 'statement memo', 'memo', 'details', 'payee',
-  'merchant', 'name', 'narrative', 'purpose', 'comment', 'note'
+  'merchant', 'name', 'narrative', 'purpose', 'comment', 'note',
+  'merchant name', 'description 1', 'description 2',
 ] as const;
 
 export const TYPE_ALIASES = ['type', 'transfer type', 'transaction type', 'drcr'] as const;
@@ -30,13 +29,13 @@ export const norm = (s: string) =>
 
 export function findHeader(headers: string[], aliases: readonly string[]): string | null {
   const H = headers.map(h => ({ raw: h, n: norm(h) }));
-  // exact
+
   for (const a of aliases) {
     const n = norm(a);
     const hit = H.find(h => h.n === n);
     if (hit) return hit.raw;
   }
-  // partial
+
   for (const a of aliases) {
     const n = norm(a);
     const hit = H.find(h => h.n.includes(n));

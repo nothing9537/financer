@@ -1,0 +1,1 @@
+export { EnsureCategoriesGate } from './ui/ensure-categories-gate';

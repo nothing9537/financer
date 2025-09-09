@@ -5,7 +5,6 @@ import {
   DESC_ALIASES, TYPE_ALIASES, CATEGORY_ALIASES, findHeader
 } from './headers';
 
-// ---- date helpers ----
 export function parseDateAny(v: unknown): string | null {
   if (v == null) return null;
   const raw = String(v).trim();
@@ -33,7 +32,6 @@ export function parseDateAny(v: unknown): string | null {
   return null;
 }
 
-// ---- description ----
 export function getDescription(row: Record<string, any>, headers: string[], descCol?: string | null): string {
   if (descCol && row[descCol]) return String(row[descCol]).trim();
   for (const alias of DESC_ALIASES) {
@@ -49,7 +47,6 @@ export function getDescription(row: Record<string, any>, headers: string[], desc
   return texts.join(' · ') || '(no description)';
 }
 
-// ---- amount parsing ----
 function hasExplicitSign(raw: string): boolean {
   return /-/.test(raw) || (raw.startsWith('(') && raw.endsWith(')'));
 }
@@ -71,7 +68,7 @@ function parseAmountToNumber(v: unknown): number | null {
     negative = true;
     s = s.slice(1, -1);
   }
-  s = s.replace(/[^\d,.\-]/g, ''); // keep digits, comma, dot, minus
+  s = s.replace(/[^\d,.\-]/g, '');
 
   const hasComma = s.includes(',');
   const hasDot = s.includes('.');
@@ -89,7 +86,6 @@ function parseAmountToNumber(v: unknown): number | null {
   return negative ? -Math.abs(num) : num;
 }
 
-// derive amount from Debit/Credit pair
 function deriveAmountNumber(row: Record<string, any>, debitCol?: string | null, creditCol?: string | null): number | null {
   const debit = debitCol ? parseAmountToNumber(row[debitCol]) : null;
   const credit = creditCol ? parseAmountToNumber(row[creditCol]) : null;
@@ -100,7 +96,6 @@ function deriveAmountNumber(row: Record<string, any>, debitCol?: string | null, 
   return null;
 }
 
-// Optional sign fix from 'Type' (used only for Debit/Credit fallback)
 function applyTypeHintNumber(amount: number | null, row: Record<string, any>, headers: string[]): number | null {
   if (amount == null) return null;
   const tCol = findHeader(headers, TYPE_ALIASES);
@@ -115,7 +110,6 @@ function applyTypeHintNumber(amount: number | null, row: Record<string, any>, he
   return amount;
 }
 
-// ---- category ----
 function getCategory(row: Record<string, any>, headers: string[], descFallback: string): string | undefined {
   const catCol = findHeader(headers, CATEGORY_ALIASES);
   if (catCol) {
@@ -151,7 +145,6 @@ function getCategory(row: Record<string, any>, headers: string[], descFallback: 
   return undefined;
 }
 
-// ---- main ----
 export function normalizeRowsToTxShape(rows: Record<string, any>[]): TxShape[] {
   if (!rows.length) return [];
 
@@ -168,7 +161,6 @@ export function normalizeRowsToTxShape(rows: Record<string, any>[]): TxShape[] {
     const r = rows[i];
 
 
-    // date → ISO
     let date: string | null = null;
     if (dateCol) date = parseDateAny(r[dateCol]);
     if (!date) {
@@ -178,26 +170,21 @@ export function normalizeRowsToTxShape(rows: Record<string, any>[]): TxShape[] {
       }
     }
 
-    // amount → number (rules about sign application)
     let amount: number | null = null;
 
     if (amountCol) {
-      // single Amount column → trust its sign
       const raw = String(r[amountCol] ?? '').trim();
       const n = parseAmountToNumber(raw);
       if (n != null) {
         amount = n;
 
-        // if no explicit sign, optional CR/DR marker in the raw value
         if (!hasExplicitSign(raw)) {
           const hint = crdrHint(raw);
           if (hint === +1) amount = Math.abs(amount);
           if (hint === -1) amount = -Math.abs(amount);
         }
       }
-      // do NOT apply Type hint when Amount exists with explicit sign
     } else if (debitCol || creditCol) {
-      // Debit/Credit fallback → may apply Type hint
       amount = deriveAmountNumber(r, debitCol, creditCol);
       amount = applyTypeHintNumber(amount, r, headers);
     }

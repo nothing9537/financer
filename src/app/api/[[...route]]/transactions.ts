@@ -3,7 +3,7 @@ import { Hono } from 'hono';
 import { v4 as uuidv4 } from 'uuid';
 import { zValidator } from '@hono/zod-validator'
 import { clerkMiddleware, getAuth } from '@hono/clerk-auth';
-import { and, desc, eq, gte, inArray, lte, sql } from 'drizzle-orm';
+import { and, desc, eq, gte, inArray, lte, or, sql } from 'drizzle-orm';
 import { parse, subDays } from 'date-fns';
 import * as _ from 'lodash';
 
@@ -53,7 +53,7 @@ const app = new Hono()
       .select(selectObject)
       .from(transactions)
       .innerJoin(accounts, eq(transactions.accountId, accounts.id))
-      .leftJoin(categories, eq(transactions.categoryId, categories.id))
+      .leftJoin(categories, or(eq(transactions.categoryId, categories.id), eq(transactions.categoryId, categories.plaid_id)))
       .where(
         and(
           accountId ? eq(transactions.accountId, accountId) : undefined,

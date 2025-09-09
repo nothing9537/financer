@@ -4,15 +4,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 import { ChartType, UseChartArgs, ChartDataType } from '../../model/types';
 import { ChartTypeToSelectItemMap, ChartTypeToUIMap } from '../consts/mappers';
+import { usePaywall } from '@/entities/subscriptions';
 
 export function useChart<T extends ChartType>({ charts, defaultValue }: UseChartArgs<T>) {
   const [chartType, setChartType] = useState<T>(defaultValue ?? charts[0]);
+  const { shouldBlock, triggerPaywall } = usePaywall();
 
   const onChartTypeChange = useCallback((newType: T) => {
+    if (shouldBlock) {
+      triggerPaywall();
+
+      return;
+    }
+
     if (newType) {
       setChartType(newType);
     }
-  }, []);
+  }, [shouldBlock, triggerPaywall]);
 
   const ChartSelect = () => {
     return (

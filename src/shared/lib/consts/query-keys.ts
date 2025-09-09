@@ -12,3 +12,7 @@ export const TRANSACTIONS_QUERY_KEYS = (params?: Record<string, any>) => ['trans
 
 export const SUMMARY_QUERY_KEY = ['summary'] as const;
 export const SUMMARY_QUERY_KEYS = (params: Record<string, any>) => ['summary', params];
+
+export const CONNECTED_BANK_KEY = ['connected-bank'] as const;
+
+export const SUBSCRIPTION_QUERY_KEY = ['subscription'] as const;

@@ -8,6 +8,8 @@ import { and, eq, inArray } from 'drizzle-orm';
 import { db } from '@/db';
 import { categories } from '@/schemas';
 import { insertCategorySchema } from '@/schemas/categories';
+import { CATEGORY_TAXONOMY } from '@/shared/lib/consts/category-taxonomy';
+import { primaryAndDetailedLabel, splitCsvLine } from './utils';
 
 const idParamValidator = zValidator("param", z.object({ id: z.string().optional() }));
 const nameJsonValidator = zValidator("json", insertCategorySchema.pick({ name: true }));
@@ -155,6 +157,46 @@ const app = new Hono()
     }
 
     return ctx.json({ category: data }, 200);
+  })
+  .post('/import-taxonomy', clerkMiddleware(), async (ctx) => {
+    const auth = getAuth(ctx);
+    if (!auth?.isAuthenticated) return ctx.json({ message: 'Unauthorized' }, 401);
+
+    const lines = CATEGORY_TAXONOMY.split(/\r?\n/).filter(Boolean);
+    if (lines.length <= 1) return ctx.json({ inserted: 0 }, 200);
+
+    const rows: Array<{ primary: string; detailed: string }> = [];
+    for (let i = 1; i < lines.length; i++) {
+      const [PRIMARY, DETAILED] = splitCsvLine(lines[i]);
+      if (!PRIMARY || !DETAILED) continue;
+      rows.push({ primary: PRIMARY.trim().toUpperCase(), detailed: DETAILED.trim().toUpperCase() });
+    }
+
+    const existing = await db
+      .select({ plaid_id: categories.plaid_id })
+      .from(categories)
+      .where(eq(categories.userId, auth.userId));
+
+    const have = new Set(
+      (existing ?? [])
+        .map(r => (r.plaid_id ?? '').toUpperCase())
+        .filter(Boolean)
+    );
+
+    const toInsert = rows
+      .filter(r => !have.has(r.detailed))
+      .map(r => ({
+        id: uuidv4(),
+        userId: auth.userId!,
+        plaid_id: r.detailed,
+        name: primaryAndDetailedLabel(r.primary, r.detailed),
+      }));
+
+    if (toInsert.length) {
+      await db.insert(categories).values(toInsert);
+    }
+
+    return ctx.json({ inserted: toInsert.length }, 200);
   });
 
 export default app;

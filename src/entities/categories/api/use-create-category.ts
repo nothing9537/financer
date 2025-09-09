@@ -5,7 +5,7 @@ import { client } from '@/shared/api/hono/client';
 import { CATEGORIES_QUERY_KEY } from '@/shared/lib/consts/query-keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-type ResponseType = InferResponseType<typeof client.api.categories.$post>;
+type ResponseType = InferResponseType<typeof client.api.categories.$post, 201>;
 type RequestType = InferRequestType<typeof client.api.categories.$post>['json'];
 
 export const useCreateCategory = () => {
