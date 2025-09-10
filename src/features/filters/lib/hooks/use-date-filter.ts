@@ -5,8 +5,6 @@ import { DateRange } from 'react-day-picker';
 import { format, subDays } from 'date-fns';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-import { FiltersLocalStorageAbstract } from '@/shared/lib/utils/filters-localstorage-abstract';
-
 export const useDateFilter = () => {
   const params = useSearchParams();
   const pathname = usePathname();
@@ -37,12 +35,6 @@ export const useDateFilter = () => {
       url: pathname,
       query,
     }, { skipEmptyString: true, skipNull: true });
-
-    const isSaveFilters = FiltersLocalStorageAbstract.getFiltersFlag();
-
-    if (isSaveFilters) {
-      FiltersLocalStorageAbstract.saveFilters(url);
-    }
 
     router.push(url);
   };

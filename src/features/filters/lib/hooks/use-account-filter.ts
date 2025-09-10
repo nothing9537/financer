@@ -1,5 +1,4 @@
 import { useGetAccounts } from '@/entities/accounts';
-import { FiltersLocalStorageAbstract } from '@/shared/lib/utils/filters-localstorage-abstract';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import qs from 'query-string';
 
@@ -30,11 +29,6 @@ export const useAccountFilter = () => {
       query
     }, { skipNull: true, skipEmptyString: true });
 
-    const isSaveFilters = FiltersLocalStorageAbstract.getFiltersFlag();
-
-    if (isSaveFilters) {
-      FiltersLocalStorageAbstract.saveFilters(url);
-    }
 
     router.push(url);
   };
