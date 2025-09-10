@@ -10,6 +10,7 @@ import { categories } from '@/schemas';
 import { insertCategorySchema } from '@/schemas/categories';
 import { CATEGORY_TAXONOMY } from '@/shared/lib/consts/category-taxonomy';
 import { primaryAndDetailedLabel, splitCsvLine } from './utils';
+import { buildPfcCategoryId } from './utils/pfc';
 
 const idParamValidator = zValidator("param", z.object({ id: z.string().optional() }));
 const nameJsonValidator = zValidator("json", insertCategorySchema.pick({ name: true }));
@@ -186,7 +187,7 @@ const app = new Hono()
     const toInsert = rows
       .filter(r => !have.has(r.detailed))
       .map(r => ({
-        id: r.detailed,
+        id: buildPfcCategoryId(auth.userId, r.detailed),
         userId: auth.userId!,
         plaid_id: r.detailed,
         name: primaryAndDetailedLabel(r.primary, r.detailed),

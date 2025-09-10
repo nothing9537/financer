@@ -29,7 +29,6 @@ export function prettifyPrimary(primary: string): string {
   return humanizeCodeSegment(primary);
 }
 
-/** Форматируем detailed с учётом primary (отрезаем префикс primary_) */
 export function prettifyDetailed(primary: string, detailed: string): string {
   let tail = detailed.startsWith(primary) ? detailed.slice(primary.length) : detailed;
   if (tail.startsWith('_')) tail = tail.slice(1);
@@ -51,3 +50,6 @@ export function prettifyPfc(pfc?: PersonalFinanceCategory | null): string {
     ? `${primaryLabel} — ${detailedLabel}`
     : primaryLabel;
 }
+
+export const buildPfcCategoryId = (userId: string, detailed: string) =>
+  `pfc:${userId}:${detailed}`;

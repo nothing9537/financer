@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import { accounts, categories, transactions } from '@/schemas';
 import { insertTransactionSchema } from '@/schemas/transactions';
 import { db } from '@/db';
+import { buildPfcCategoryId } from './utils/pfc';
 
 const queryValidator = zValidator("query", z.object({
   from: z.string().optional(),
@@ -118,14 +119,15 @@ const app = new Hono()
       return ctx.json({ message: 'Unauthorized' }, 401);
     }
 
+    const valuesToInsert = values.map((v) => ({
+      ...v,
+      id: uuidv4(),
+      categoryId: v.categoryId ? buildPfcCategoryId(auth.userId, v.categoryId) : null,
+    }));
+
     const data = await db
       .insert(transactions)
-      .values(
-        values.map((v) => ({
-          id: uuidv4(),
-          ...v,
-        })),
-      )
+      .values(valuesToInsert)
       .returning();
 
     return ctx.json({ transactions: data }, 200);
