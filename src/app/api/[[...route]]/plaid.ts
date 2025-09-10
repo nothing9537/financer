@@ -79,13 +79,6 @@ const app = new Hono()
         ),
       );
 
-    await db
-      .delete(categories)
-      .where(
-        and(
-          eq(categories.userId, auth.userId),
-        ),
-      );
 
     return ctx.json({ data: connectedBank }, 200);
   },
