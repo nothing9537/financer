@@ -132,26 +132,44 @@
 
 ---
 
-## 🚀 Getting Started
+## Quick Start Guide
 
-```bash
-# 1) Install deps
-bun i
+1) **Create accounts & collect tokens (fill `.env`)**
+   - **Clerk**: `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, `CLERK_PUBLISHABLE_KEY - same as NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+   - **Database (Neon Postgres)**: `DEVELOPMENT_DB_URL`, `PRODUCTION_DB_URL`
+   - **Plaid (Sandbox)**: `PLAID_CLIENT_TOKEN`, `PLAID_SECRET_TOKEN` *(use sandbox keys only)*
+   - **Lemon Squeezy**: `LEMONSQUEEZY_STORE_ID`, `LEMONSQUEEZY_PRODUCT_ID`, `LEMONSQUEEZY_API_KEY`, `LEMONSQUEEZY_WEBHOOK_SECRET`
+   - **App URL**: `NEXT_PUBLIC_APP_URL` (e.g., `http://localhost:3000` and later your vercel app URL)
+   - **Sentry (optional, prod/preview only)**: `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_AUTH_TOKEN`
 
-# 2) Copy envs
-cp .env.example .env
+2) **Set up the project locally**
+   ```bash
+   git clone <your-repo-url> && cd <project-folder>
+   cp .env.example .env     # paste all tokens from step 1
+   pnpm i                   # or: bun i
+   pnpm db:generate && pnpm db:migrate
+   pnpm dev                 # app on http://localhost:3000
+   ```
 
-# 3) DB migrations (Drizzle)
-bun run db:update
+3) **Connect Lemon Squeezy webhooks (recommended via ngrok)**
+   - Install **ngrok** locally, then expose your dev server:
+     ```bash
+     ngrok http 3000
+     ```
+   - Copy the **HTTPS Forwarding URL** from ngrok and set it as your Lemon Squeezy webhook endpoint:
+     ```
+     https://<your-ngrok-subdomain>.ngrok.io/api/subscriptions/webhook
+     ```
+   - Save the webhook in Lemon Squeezy and use your `LEMONSQUEEZY_WEBHOOK_SECRET` in `.env`.  
 
-# 4) Dev
-bun run dev
-# open http://localhost:3000
-```
+4) **Sign in & try the flows**
+   - Go to `/sign-in` (Clerk) → log in.
+   - Test **subscription** (Checkout/Portal) and **Plaid (sandbox)** linking.
+   - Use **filters/analytics** and **CSV import/export**.
 
 ### Environment variables (`.env.example`)
 
-- **Clerk:** `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`  
+- **Clerk:** `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, `CLERK_PUBLISHABLE_KEY - same as NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
 - **DB:** `PRODUCTION_DB_URL`, `DEVELOPMENT_DB_URL` (Neon)  
 - **Sentry:** `NEXT_PUBLIC_SENTRY_DSN` (prod/preview), `SENTRY_AUTH_TOKEN` (CI)  
 - **Plaid (sandbox):** `PLAID_CLIENT_TOKEN`, `PLAID_SECRET_TOKEN`  
