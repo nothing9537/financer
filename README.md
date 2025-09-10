@@ -28,7 +28,8 @@
 - **Lemon Squeezy**:  
   - `POST /api/subscriptions/checkout` → URL to **Checkout** or **Customer Portal** (if already subscribed)  
   - `GET /api/subscriptions/current` → current status  
-  - `POST /api/subscriptions/webhook` → HMAC-verified upsert in DB  
+  - `POST /api/subscriptions/webhook` → HMAC-verified upsert in DB
+  - `Test credentials` → Card Number: 4242 4242 4242 4242, Expiration date: Any in the future, CVV: any, Rest - any valid credentials to bypass LemonSqueezy validation.
 - **Paywall gating**: Plaid linking and CSV import require an active subscription.
 
 ### App UX
