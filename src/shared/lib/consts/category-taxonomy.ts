@@ -1,5 +1,3 @@
-import { Primary } from '@/features/csv-import-button/lib/primary-detail-router';
-
 export const CATEGORY_TAXONOMY = `PRIMARY,DETAILED,DESCRIPTION
 INCOME,INCOME_DIVIDENDS,Dividends from investment accounts
 INCOME,INCOME_INTEREST_EARNED,Income from interest on savings accounts

@@ -17,7 +17,6 @@ export function DataTableDeleteButton<TData, TValue>({ table, onDelete }: DataTa
   const selectedRows = table.getFilteredSelectedRowModel().rows.length;
   const [ConfirmDialog, confirm] = useConfirm({ title: "Are you sure?", description: "You are about to perform a bulk delete." });
 
-
   const deleteHandler = async () => {
     const ok = await confirm();
 
